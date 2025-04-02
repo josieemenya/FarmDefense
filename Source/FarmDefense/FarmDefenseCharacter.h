@@ -49,6 +49,11 @@ class AFarmDefenseCharacter : public ACharacter
 public:
 	AFarmDefenseCharacter();
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class APlants* PlantRef;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class USphereComponent* OverlapSphere;
 
 protected:
 
@@ -60,6 +65,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	int32 Actions;
+
+	UFUNCTION()
+	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 			
 
 protected:
