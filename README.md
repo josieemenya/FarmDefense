@@ -3,4 +3,4 @@
 
 
 
- ![using lambdas](other stuff/lambda.png)
+ ![using lambdas](otherstuff/lambda.png)
