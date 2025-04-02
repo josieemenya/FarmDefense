@@ -44,6 +44,8 @@ class AFarmDefenseCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	
+
 public:
 	AFarmDefenseCharacter();
 	
@@ -55,6 +57,9 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	int32 Actions;
 			
 
 protected:
