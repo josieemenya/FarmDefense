@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InteractInterface.h"
 #include "Plants.generated.h"
 
 UCLASS()
-class FARMDEFENSE_API APlants : public AActor
+class FARMDEFENSE_API APlants : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
 	
@@ -27,8 +28,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool readyforHarvest;
 
-	UFUNCTION(BlueprintCallable)
-	FORCEINLINE void Grow() { (hasBeenWatered)? --DaysToGrow : DaysToGrow; }
+	UFUNCTION()
+	virtual void Action() override;
 
 protected:
 	// Called when the game starts or when spawned

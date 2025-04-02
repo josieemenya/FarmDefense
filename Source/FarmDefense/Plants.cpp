@@ -11,6 +11,11 @@ APlants::APlants()
 
 }
 
+void APlants::Action()
+{
+	(hasBeenWatered) ? --DaysToGrow : DaysToGrow;
+}
+
 // Called when the game starts or when spawned
 void APlants::BeginPlay()
 {

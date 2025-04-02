@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "InteractInterface.h"
 #include "Logging/LogMacros.h"
 #include "FarmDefenseCharacter.generated.h"
 
@@ -49,8 +50,6 @@ class AFarmDefenseCharacter : public ACharacter
 public:
 	AFarmDefenseCharacter();
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class APlants* PlantRef;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* OverlapSphere;
