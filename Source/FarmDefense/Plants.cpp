@@ -23,8 +23,7 @@ void APlants::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (hasBeenWatered)
-		[&]{ readyforHarvest = true; }; // this was for practice lets rework later
+	
 
 }
 
