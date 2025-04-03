@@ -12,7 +12,7 @@ APlants::APlants()
 }
 
 
-void APlants::Action()
+void APlants::Action_Implementation()
 {
 	(hasBeenWatered) ? --DaysToGrow : DaysToGrow;
 	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));

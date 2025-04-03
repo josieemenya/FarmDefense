@@ -28,8 +28,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool readyforHarvest;
 
-	//UFUNCTION()
-	virtual void Action() override;
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	virtual void Action_Implementation() override;
 	//void Action_Implementation() override;
 
 protected:
