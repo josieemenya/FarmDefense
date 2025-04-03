@@ -9,6 +9,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "InputActionValue.h"
 
 #include "Components/SphereComponent.h"
@@ -140,10 +141,16 @@ void AFarmDefenseCharacter::Look(const FInputActionValue& Value)
 void AFarmDefenseCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	
+	if (OtherActor == this)
+		return;
 	ensure(OtherActor);
-	(OtherActor) ? GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant")) : GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant is invalid")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
-	if (OtherActor->GetClass()->ImplementsInterface(UInteractInterface::StaticClass())) {
-		IInteractInterface::Execute_Action(OtherActor); 
+	AActor* ActorRef = Cast<AActor>(OtherActor);
+	(ActorRef) ? GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), ActorRef->GetName()) : GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant is invalid")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
+	if (ActorRef && ActorRef->Implements<UInteractInterface>()) {
+		IInteractInterface::Execute_Action(ActorRef); 
+	} else {
+		GEngine->AddOnScreenDebugMessage(2, 10.f, FColor::MakeRandomColor(), TEXT("No dice")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
+
 	}
 
 }
