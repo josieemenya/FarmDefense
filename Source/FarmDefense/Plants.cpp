@@ -11,10 +11,13 @@ APlants::APlants()
 
 }
 
+
 void APlants::Action()
 {
 	(hasBeenWatered) ? --DaysToGrow : DaysToGrow;
+	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
 }
+
 
 // Called when the game starts or when spawned
 void APlants::BeginPlay()
