@@ -45,6 +45,9 @@ class AFarmDefenseCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* TriggerAction;
+
 	
 
 public:
@@ -62,12 +65,16 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	void Trigger(const FInputActionValue& Value);
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	int32 Actions;
 
 	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-			
+
+	UFUNCTION()
+	virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
 
 protected:
 	// APawn interface
@@ -76,10 +83,19 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	AActor* OverlappingActor {nullptr};
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
+	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
+	
+
+	
+	
 };
 

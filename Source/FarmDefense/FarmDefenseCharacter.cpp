@@ -66,7 +66,10 @@ void AFarmDefenseCharacter::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 	if (OverlapSphere)
+	{
 		OverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &AFarmDefenseCharacter::OnOverlap);
+		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -95,6 +98,8 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Look);
+
+		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Trigger);
 	}
 	else
 	{
@@ -138,19 +143,44 @@ void AFarmDefenseCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
+{
+	bool Triggered = Value.Get<bool>();
+	if (Controller != nullptr)
+	{
+		if(Triggered && GetOverlappingActor())
+		{
+			(GetOverlappingActor()->Implements<UInteractInterface>()) ? IInteractInterface::Execute_Action(GetOverlappingActor()) : GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
+		}
+	}
+}
+
+//  && OverlappingItem->Implements<UInteractInterface>()
+//IInteractInterface::Execute_Action(OverlappingItem); 
+
+
 void AFarmDefenseCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	AActor* ActorRef = Cast<AActor>(OtherActor);
 	
 	if (OtherActor == this)
 		return;
-	ensure(OtherActor);
-	AActor* ActorRef = Cast<AActor>(OtherActor);
+	
 	(ActorRef) ? GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), ActorRef->GetName()) : GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant is invalid")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
-	if (ActorRef && ActorRef->Implements<UInteractInterface>()) {
-		IInteractInterface::Execute_Action(ActorRef); 
+	if (ActorRef) {
+		SetOverlappingActor(ActorRef);
 	} else {
 		GEngine->AddOnScreenDebugMessage(2, 10.f, FColor::MakeRandomColor(), TEXT("No dice")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
 
 	}
 
+}
+
+void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
+{
+	AActor* ActorRef = Cast<AActor>(OtherActor);
+	if (OtherActor == this)
+		return;
+	if (ActorRef) { SetOverlappingActor(nullptr); } else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
 }
