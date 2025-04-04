@@ -85,6 +85,8 @@ protected:
 
 	AActor* OverlappingActor {nullptr};
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	bool InAction = true; 
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

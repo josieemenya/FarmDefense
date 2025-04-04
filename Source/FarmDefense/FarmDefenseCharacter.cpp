@@ -150,6 +150,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 	{
 		if(Triggered && GetOverlappingActor())
 		{
+			InAction = true;
 			(GetOverlappingActor()->Implements<UInteractInterface>()) ? IInteractInterface::Execute_Action(GetOverlappingActor()) : GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
 		} else
 		{
