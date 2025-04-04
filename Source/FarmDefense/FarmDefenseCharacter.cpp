@@ -70,6 +70,7 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &AFarmDefenseCharacter::OnOverlap);
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
+	 
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -150,10 +151,10 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 	{
 		if(Triggered && GetOverlappingActor())
 		{
-			InAction = true;
-			(GetOverlappingActor()->Implements<UInteractInterface>()) ? IInteractInterface::Execute_Action(GetOverlappingActor()) : GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
+			if(GetOverlappingActor()->Implements<UInteractInterface>()) { IInteractInterface::Execute_Action(GetOverlappingActor());} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
 		} else
 		{
+			
 			GEngine->AddOnScreenDebugMessage(5, 2.f, FColor::MakeRandomColor(), TEXT("bbb")); 
 		}
 	}
@@ -186,5 +187,5 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 	AActor* ActorRef = Cast<AActor>(OtherActor);
 	if (OtherActor == this)
 		return;
-	if (ActorRef) { SetOverlappingActor(nullptr); } else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
+	if (ActorRef) { SetOverlappingActor(nullptr);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
 }
