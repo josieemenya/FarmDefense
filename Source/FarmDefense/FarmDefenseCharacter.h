@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InteractInterface.h"
 #include "Logging/LogMacros.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "FarmDefenseCharacter.generated.h"
 
 class USpringArmComponent;
@@ -84,6 +85,24 @@ protected:
 	virtual void BeginPlay();
 
 	AActor* OverlappingActor {nullptr};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	double TotalWealth {};
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	int32 DaysSpent;
+
+public:
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "FarmDefense")
+	FORCEINLINE float GetTotalWealth() const { return TotalWealth; }
+
+	UFUNCTION(BlueprintCallable, Category = "FarmDefense")	FORCEINLINE void AddToWealth(float SellPrice){ TotalWealth += SellPrice; }
+
+	UFUNCTION(BlueprintCallable, Category = "FarmDefense")
+	FORCEINLINE void RemoveFromWealth(){ TotalWealth -= GetTotalWealth(); }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	TArray<AActor*> Inventory;
 	
 public:
 	/** Returns CameraBoom subobject **/

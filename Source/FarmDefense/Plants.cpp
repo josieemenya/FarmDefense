@@ -8,6 +8,7 @@ APlants::APlants()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	MaxPlantHealth = 100;
 
 }
 
@@ -23,6 +24,7 @@ void APlants::Action_Implementation()
 void APlants::BeginPlay()
 {
 	Super::BeginPlay();
+	PlantHealth = MaxPlantHealth;
 	
 }
 
