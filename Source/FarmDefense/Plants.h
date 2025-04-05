@@ -34,21 +34,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool readyforHarvest;
 
-	protected:
+	public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float SellPrice;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float MaxSellPrince;
 
 	public:
-	UFUNCTION(BlueprintCallable, Category = "FarmDefense")
-	float GetSellPrince() const { return SellPrice; } // should have many factors for sell price
+	//UFUNCTION(BlueprintCallable, Category = "FarmDefense")
+	//float GetSellPrince() const { return SellPrice; } // should have many factors for sell price
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Action_Implementation() override;
-	//void Action_Implementation() override;
+	
 
 protected:
 	// Called when the game starts or when spawned
