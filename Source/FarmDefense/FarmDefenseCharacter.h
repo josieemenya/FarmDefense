@@ -22,6 +22,8 @@ class AFarmDefenseCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
+	class USkeletalMeshComponent* Mesh;
+	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	USpringArmComponent* CameraBoom;
@@ -112,8 +114,9 @@ public:
 
 	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
 	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
-	
 
+	UPROPERTY(EditAnywhere)
+	class UAnimSequence* WaterPlant; 
 	
 	
 };

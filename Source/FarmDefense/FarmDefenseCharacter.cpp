@@ -11,7 +11,9 @@
 #include "EnhancedInputSubsystems.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "InputActionValue.h"
+#include "Animation/AnimSequence.h"
 
+#include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -146,12 +148,17 @@ void AFarmDefenseCharacter::Look(const FInputActionValue& Value)
 
 void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 {
+	Mesh = GetMesh(); 
 	bool Triggered = Value.Get<bool>();
 	if (Controller != nullptr)
 	{
 		if(Triggered && GetOverlappingActor())
 		{
-			if(GetOverlappingActor()->Implements<UInteractInterface>()) { IInteractInterface::Execute_Action(GetOverlappingActor());} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
+			if(GetOverlappingActor()->Implements<UInteractInterface>() && WaterPlant)
+			{
+				Mesh->PlayAnimation(WaterPlant, false); 
+				IInteractInterface::Execute_Action(GetOverlappingActor());
+			} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
 		} else
 		{
 			
