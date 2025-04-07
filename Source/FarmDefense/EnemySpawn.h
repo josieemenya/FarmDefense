@@ -17,6 +17,7 @@ class FARMDEFENSE_API AEnemySpawn : public AAIController
 	protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* EnemyTree;
 	
 };
