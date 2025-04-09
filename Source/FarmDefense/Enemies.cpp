@@ -3,11 +3,15 @@
 
 #include "Enemies.h"
 
+
+
 // Sets default values
 AEnemies::AEnemies()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	
 
 }
 
@@ -16,6 +20,8 @@ void AEnemies::BeginPlay()
 {
 	Super::BeginPlay();
 	enemy_stats = FEnemyStats(100, 100);
+
+	
 	
 }
 

@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	FEnemyStats enemy_stats;
 
+	UPROPERTY(EditAnywhere)
+	TArray<AActor*> Plants; 
+
 	UFUNCTION(BlueprintPure)
 	float GetHealth() { return enemy_stats.Health; } 
 
