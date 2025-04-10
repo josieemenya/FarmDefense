@@ -19,5 +19,10 @@ class FARMDEFENSE_API AEnemySpawn : public AAIController
 
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* EnemyTree;
+
+	virtual void OnPossess(APawn* ControlledPawn) override;
+
+	UPROPERTY(EditAnywhere)
+	AActor* Player;
 	
 };
