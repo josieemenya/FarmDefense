@@ -70,6 +70,7 @@ void AFarmDefenseCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	localbool = true;
 	if (OverlapSphere)
 	{
 		OverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &AFarmDefenseCharacter::OnOverlap);
@@ -184,13 +185,16 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 		ContextMenuWidget->Construct();
 		ContextMenuWidget->AddToViewport();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true); 
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true);
+		//DisableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		
 	} else
 	{
 		ContextMenuWidget->RemoveFromViewport();
 		ContextMenuWidget->Destruct();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("Killed That Bitch Local Menu"));
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false); 
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
+		//EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	}
 	
 }
