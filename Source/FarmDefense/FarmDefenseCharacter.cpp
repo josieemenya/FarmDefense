@@ -15,6 +15,7 @@
 
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
+#include "Blueprint/UserWidget.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -165,6 +166,24 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 			GEngine->AddOnScreenDebugMessage(5, 2.f, FColor::MakeRandomColor(), TEXT("bbb")); 
 		}
 	}
+}
+
+void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
+{
+	UUserWidget* ActualMenu = ContextMenuWidget;
+	bool Pressed = Value.Get<bool>();
+
+	if (FlipFlop(ActualMenu) && Pressed)
+	{
+		ActualMenu = CreateDefaultSubobject<UUserWidget>(TEXT("ActualMenu"));
+		ActualMenu->Construct();
+		ActualMenu->AddToViewport();
+	} else
+	{
+		ActualMenu->RemoveFromViewport();
+		ActualMenu->Destruct();
+	}
+	
 }
 
 //  && OverlappingItem->Implements<UInteractInterface>()

@@ -7,6 +7,7 @@
 #include "InteractInterface.h"
 #include "Logging/LogMacros.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "SimpleMacros.h"
 #include "FarmDefenseCharacter.generated.h"
 
 class USpringArmComponent;
@@ -14,11 +15,12 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class UUserWidget;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AFarmDefenseCharacter : public ACharacter
+class AFarmDefenseCharacter : public ACharacter, public SimpleMacros
 {
 	GENERATED_BODY()
 
@@ -51,6 +53,8 @@ class AFarmDefenseCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* TriggerAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* OpenContextMenuAction;
 	
 
 public:
@@ -69,6 +73,8 @@ protected:
 	void Look(const FInputActionValue& Value);
 
 	void Trigger(const FInputActionValue& Value);
+
+	void OpenContextMenu(const FInputActionValue& Value);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	int32 Actions;
@@ -105,6 +111,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	TArray<AActor*> Inventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	UUserWidget* ContextMenuWidget;
 	
 public:
 	/** Returns CameraBoom subobject **/
