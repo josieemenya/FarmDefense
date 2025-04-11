@@ -172,6 +172,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 
 void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 {
+	GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("we acknowlege you??"));
 	UUserWidget* ActualMenu = ContextMenuWidget;
 	bool Pressed = Value.Get<bool>();
 
@@ -181,12 +182,12 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 		ActualMenu = CreateWidget<UUserWidget>(GetWorld());
 		ActualMenu->Construct();
 		ActualMenu->AddToViewport();
-		GEngine->AddOnScreenDebugMessage(67, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
+		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
 	} else
 	{
 		ActualMenu->RemoveFromViewport();
 		ActualMenu->Destruct();
-		GEngine->AddOnScreenDebugMessage(67, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
+		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("Killed That Bitch Local Menu"));
 	}
 	
 }
