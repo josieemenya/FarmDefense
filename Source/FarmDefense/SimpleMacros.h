@@ -7,12 +7,13 @@
 /**
  * 
  */
+static bool localbool = true;
 class FARMDEFENSE_API SimpleMacros
 {
 public:
 
 	bool FlipFlop(UObject* x);
-	bool localbool = true;
+	
 	SimpleMacros();
 	~SimpleMacros();
 	
