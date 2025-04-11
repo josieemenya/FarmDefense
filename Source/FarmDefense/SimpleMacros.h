@@ -7,7 +7,7 @@
 /**
  * 
  */
-static bool localbool = true;
+static bool localbool = false;
 class FARMDEFENSE_API SimpleMacros
 {
 public:

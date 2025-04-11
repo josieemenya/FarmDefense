@@ -16,6 +16,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -173,21 +174,23 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 {
 	GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("we acknowlege you??"));
-	UUserWidget* ActualMenu = ContextMenuWidget;
+	
 	bool Pressed = Value.Get<bool>();
 
-	if (FlipFlop(ActualMenu) && Pressed)
+	if (FlipFlop(ContextMenuWidget) && Pressed)
 	{
 		
-		ActualMenu = CreateWidget<UUserWidget>(GetWorld());
-		ActualMenu->Construct();
-		ActualMenu->AddToViewport();
+		ContextMenuWidget = CreateWidget<UUserWidget>(GetWorld(), ContextMenuWidgetClass);
+		ContextMenuWidget->Construct();
+		ContextMenuWidget->AddToViewport();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true); 
 	} else
 	{
-		ActualMenu->RemoveFromViewport();
-		ActualMenu->Destruct();
+		ContextMenuWidget->RemoveFromViewport();
+		ContextMenuWidget->Destruct();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("Killed That Bitch Local Menu"));
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false); 
 	}
 	
 }

@@ -112,6 +112,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	TArray<AActor*> Inventory;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FarmDefense")
+	TSubclassOf<UUserWidget> ContextMenuWidgetClass;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	UUserWidget* ContextMenuWidget;
 	
