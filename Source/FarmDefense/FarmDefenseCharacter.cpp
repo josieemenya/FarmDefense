@@ -62,6 +62,7 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	OverlapSphere = CreateDefaultSubobject<USphereComponent>(TEXT("OverlapSphere"));
 	OverlapSphere->SetupAttachment(RootComponent);
 	OverlapSphere->SetSphereRadius(30.f);
+	ContextMenuWidget = nullptr;
 }
 
 void AFarmDefenseCharacter::BeginPlay()
@@ -104,6 +105,7 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Look);
 
 		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Trigger);
+		EnhancedInputComponent->BindAction(OpenContextMenuAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::OpenContextMenu);
 	}
 	else
 	{
@@ -173,16 +175,16 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 	UUserWidget* ActualMenu = ContextMenuWidget;
 	bool Pressed = Value.Get<bool>();
 
-	if (FlipFlop(ActualMenu) && Pressed)
+	/*if (FlipFlop(ActualMenu) && Pressed)
 	{
-		ActualMenu = CreateDefaultSubobject<UUserWidget>(TEXT("ActualMenu"));
+		ActualMenu = CreateWidget<UUserWidget>(GetWorld());
 		ActualMenu->Construct();
 		ActualMenu->AddToViewport();
 	} else
 	{
 		ActualMenu->RemoveFromViewport();
 		ActualMenu->Destruct();
-	}
+	}*/
 	
 }
 
