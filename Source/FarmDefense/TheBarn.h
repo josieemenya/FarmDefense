@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "BarnInterface.h"
 #include "TheBarn.generated.h"
 
 UCLASS()
-class FARMDEFENSE_API ATheBarn : public AActor
+class FARMDEFENSE_API ATheBarn : public AActor, public IBarnInterface
 {
 	GENERATED_BODY()
 	
@@ -22,5 +23,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	FBarnStats GetBarnStats;
+
+	UPROPERTY(EditAnywhere)
+	class UStaticMeshComponent* BarnMesh;
+
+	UFUNCTION(BlueprintCallable)
+	virtual int32 GetHealth_Implementation(const FBarnStats &Stats) override;
+
+	UFUNCTION(BlueprintCallable)
+	bool CanAttack_Implementation(float Range, const FBarnStats& Stats) override;
 
 };
