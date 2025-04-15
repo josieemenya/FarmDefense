@@ -3,6 +3,7 @@
 
 #include "TheBarn.h"
 #include "Components/StaticMeshComponent.h"
+#include "Blueprint/UserWidget.h"
 
 // Sets default values
 ATheBarn::ATheBarn()
@@ -12,6 +13,8 @@ ATheBarn::ATheBarn()
 	GetBarnStats = FBarnStats(100, 100, 200);
 	BarnMesh = CreateDefaultSubobject<UStaticMeshComponent>("BarnMesh");
 	BarnMesh->SetupAttachment(GetRootComponent());
+	HealthBar = CreateWidget<UUserWidget>(GetWorld(), HealthBarClass, TEXT("Health"));
+	
 
 }
 

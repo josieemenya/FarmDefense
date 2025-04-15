@@ -29,6 +29,12 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* BarnMesh;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UUserWidget> HealthBarClass;
+
+	UPROPERTY(EditAnywhere)
+	class UUserWidget* HealthBar;
+
 	UFUNCTION(BlueprintCallable)
 	virtual int32 GetHealth_Implementation(const FBarnStats &Stats) override;
 
