@@ -10,7 +10,7 @@
 #include "Plants.generated.h"
 
 UCLASS()
-class FARMDEFENSE_API APlants : public AActor, public IInteractInterface, public ICanPlaceInterface
+class FARMDEFENSE_API APlants : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
 	
@@ -66,9 +66,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UMaterial* M_CannotPlaceMaterial;
-	
-	UFUNCTION(BlueprintCallable)
-	virtual void UpdateState_Implementation(bool bIsPlacementAvailable, UMaterial* PlaceableMaterial, UMaterial* UnplaceableMaterial) override;
+
 	
 protected:
 	

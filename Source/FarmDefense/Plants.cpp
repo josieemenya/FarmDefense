@@ -23,30 +23,6 @@ void APlants::Action_Implementation()
 }
 
 
-void APlants::UpdateState_Implementation(bool bIsPlacementAvailable, UMaterial* PlaceableMaterial,
-	UMaterial* UnplaceableMaterial)
-{
-	TArray<AActor*> FoundActors;
-	GetOwner()->GetOverlappingActors(FoundActors);
-	(FoundActors.Num() == 0) ? bIsPlacementAvailable = true : bIsPlacementAvailable = false;
-	
-
-		
-			if (bIsPlacementAvailable)
-			{
-				UActorComponent* a = GetOwner()->GetComponentByClass(UStaticMeshComponent::StaticClass());
-				UPrimitiveComponent* b = Cast<UPrimitiveComponent>(a);
-				b->SetMaterial(0, PlaceableMaterial);
-				GEngine->AddOnScreenDebugMessage(23, 10.f, FColor::MakeRandomColor(), TEXT(" "));
-			} else
-			{
-				//c->SetMaterial(0,UnplaceableMaterial);
-			}
-		
-	
-}
-
-
 
 // Called when the game starts or when spawned
 void APlants::BeginPlay()
