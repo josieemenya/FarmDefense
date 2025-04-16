@@ -6,10 +6,11 @@
 #include "GameFramework/Actor.h"
 #include "InteractInterface.h"
 #include "InputCoreTypes.h"
+#include "CanPlaceInterface.h"
 #include "Plants.generated.h"
 
 UCLASS()
-class FARMDEFENSE_API APlants : public AActor, public IInteractInterface
+class FARMDEFENSE_API APlants : public AActor, public IInteractInterface, public ICanPlaceInterface
 {
 	GENERATED_BODY()
 	
@@ -17,6 +18,7 @@ public:
 	// Sets default values for this actor's properties
 	APlants();
 
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float PlantHealth;
 
@@ -56,7 +58,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> PlantActionMenuContext;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanBePlaced;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterial* M_CanPlaceMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UMaterial* M_CannotPlaceMaterial;
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void UpdateState_Implementation(bool bIsPlacementAvailable, UMaterial* PlaceableMaterial, UMaterial* UnplaceableMaterial) override;
+	
 protected:
+	
+	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
