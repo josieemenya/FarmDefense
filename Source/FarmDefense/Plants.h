@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InteractInterface.h"
+#include "InputCoreTypes.h"
 #include "Plants.generated.h"
 
 UCLASS()
@@ -48,12 +49,18 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void Action_Implementation() override;
-	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UUserWidget* PlantActionMenu;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class UUserWidget> PlantActionMenuContext;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void NotifyActorOnClicked(FKey ButtonPressed = EKeys::LeftMouseButton) override;
 	
 public:	
 	// Called every frame

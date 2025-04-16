@@ -20,12 +20,19 @@ void APlants::Action_Implementation()
 }
 
 
+
 // Called when the game starts or when spawned
 void APlants::BeginPlay()
 {
 	Super::BeginPlay();
 	PlantHealth = MaxPlantHealth;
 	
+}
+
+void APlants::NotifyActorOnClicked(FKey ButtonPressed)
+{
+	Super::NotifyActorOnClicked(ButtonPressed);
+	GEngine->AddOnScreenDebugMessage(12, 10.f, FColor::MakeRandomColor(), TEXT("I've been clicked"));
 }
 
 // Called every frame

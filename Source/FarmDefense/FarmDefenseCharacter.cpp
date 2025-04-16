@@ -64,6 +64,7 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	OverlapSphere->SetupAttachment(RootComponent);
 	OverlapSphere->SetSphereRadius(30.f);
 	ContextMenuWidget = nullptr;
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
 }
 
 void AFarmDefenseCharacter::BeginPlay()
@@ -213,6 +214,7 @@ void AFarmDefenseCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, 
 	(ActorRef) ? GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), ActorRef->GetName()) : GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant is invalid")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
 	if (ActorRef) {
 		SetOverlappingActor(ActorRef);
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true);
 	} else {
 		GEngine->AddOnScreenDebugMessage(2, 10.f, FColor::MakeRandomColor(), TEXT("No dice")); // if this doesn't print, ensure has aborted function meaning ref isn't valid
 
@@ -226,5 +228,5 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 	AActor* ActorRef = Cast<AActor>(OtherActor);
 	if (OtherActor == this)
 		return;
-	if (ActorRef) { SetOverlappingActor(nullptr);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
+	if (ActorRef) { SetOverlappingActor(nullptr); UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
 }
