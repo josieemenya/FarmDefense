@@ -64,7 +64,7 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	OverlapSphere->SetupAttachment(RootComponent);
 	OverlapSphere->SetSphereRadius(30.f);
 	ContextMenuWidget = nullptr;
-	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
+	
 }
 
 void AFarmDefenseCharacter::BeginPlay()
@@ -77,6 +77,7 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentBeginOverlap.AddDynamic(this, &AFarmDefenseCharacter::OnOverlap);
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
 	 
 }
 

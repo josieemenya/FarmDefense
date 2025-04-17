@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "InteractInterface.h"
 #include "InputCoreTypes.h"
-#include "CanPlaceInterface.h"
 #include "Plants.generated.h"
 
 UCLASS()
@@ -58,14 +57,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> PlantActionMenuContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bCanBePlaced;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterial* M_CanPlaceMaterial;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UMaterial* M_CannotPlaceMaterial;
 
 	
 protected:
