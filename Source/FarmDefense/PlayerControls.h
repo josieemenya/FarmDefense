@@ -45,21 +45,20 @@ class FARMDEFENSE_API APlayerControls : public APlayerController
 	UFUNCTION(BlueprintCallable)
 	void UpdatePlacement()
 	{
-		
+		bool isHit = false;
 		FVector WorldLocation;
 		FVector WorldDirection;
 		DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
-		FHitResult Hit;
-		GetWorld()->LineTraceSingleByChannel(Hit, WorldLocation, (WorldLocation + (WorldDirection * 10000)), Landscape);
 		
+		FHitResult Hit;
+		GetWorld()->LineTraceSingleByChannel(Hit, WorldLocation, (WorldLocation + (WorldDirection * 10000)), ECC_Camera);
 		DrawDebugPoint(GetWorld(), Hit.Location, 100.f, FColor::Red, false, 5.0f);
-		if(!Hit.bBlockingHit && Hit.GetActor()){
-						FString Name = *Hit.GetActor()->GetName();
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, Name);
-						//PlaceableActor->SetActorLocation(Hit.Location);
+		if(!Hit.bBlockingHit){
+						//GEngine->AddOnScreenDebugMessage(12, 5.f, FColor::Red, "Working");
+						PlaceableActor->SetActorLocation(Hit.Location);
 		}
 		else
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Name");
+			GEngine->AddOnScreenDebugMessage(12, 5.f, FColor::Red, "Name");
 	};
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category = "References")
