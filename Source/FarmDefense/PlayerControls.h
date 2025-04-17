@@ -51,11 +51,13 @@ class FARMDEFENSE_API APlayerControls : public APlayerController
 		DeprojectMousePositionToWorld(WorldLocation, WorldDirection);
 		FHitResult Hit;
 		GetWorld()->LineTraceSingleByChannel(Hit, WorldLocation, (WorldLocation + (WorldDirection * 10000)), Landscape);
-		FString Name = *Hit.GetActor()->GetName();
+		
 		DrawDebugPoint(GetWorld(), Hit.Location, 100.f, FColor::Red, false, 5.0f);
-		if(!Hit.bBlockingHit && Hit.GetActor())
+		if(!Hit.bBlockingHit && Hit.GetActor()){
+						FString Name = *Hit.GetActor()->GetName();
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, Name);
-//PlaceableActor->SetActorLocation(Hit.Location);
+						//PlaceableActor->SetActorLocation(Hit.Location);
+		}
 		else
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, "Name");
 	};
