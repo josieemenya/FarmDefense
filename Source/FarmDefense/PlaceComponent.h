@@ -46,7 +46,7 @@ public:
 	void PreviewLoop();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	class ALandscape* TheGround;
+	AActor* TheGround;
 
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure)
