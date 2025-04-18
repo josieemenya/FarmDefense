@@ -19,7 +19,7 @@ public:
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlaceComponent")
-	ACharacter* Character;
+	APawn* Character;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlaceComponent")
 	TSubclassOf<class UStaticMeshComponent> MeshRef;
@@ -30,10 +30,29 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	FTransform Transform;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMeshComponent* Mesh;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	UStaticMesh* NewMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UMaterial* PerfectMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class UMaterial* BadMaterial;
+	
 	UFUNCTION(BlueprintCallable)
 	void PreviewLoop();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	class ALandscape* TheGround;
+
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool CanBuild(TArray<AActor*> GetOverlaps);
+
+	
 
 
 protected:

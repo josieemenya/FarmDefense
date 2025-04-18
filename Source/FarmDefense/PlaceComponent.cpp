@@ -4,9 +4,14 @@
 #include "PlaceComponent.h"
 
 #include "K2Node_DoOnceMultiInput.h"
+#include "ShaderCompiler.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/SceneComponent.h"
+#include "Materials/Material.h"
 #include "Camera/CameraComponent.h"
-#include "GameFramework/Character.h"
+#include "Landscape.h"
+
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values for this component's properties
 UPlaceComponent::UPlaceComponent()
@@ -23,7 +28,7 @@ UPlaceComponent::UPlaceComponent()
 void UPlaceComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	//Character = UGameplayStatics::GetActorOfClass(APawn, NULL);
 	// ...
 	
 }
@@ -39,21 +44,45 @@ void UPlaceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UPlaceComponent::PreviewLoop()
 {
-	FHitResult Hit;
-	FVector StartLocation = CameraComp->GetComponentLocation();
-	FVector EndLocation = StartLocation + (CameraComp->GetForwardVector() * 500);
-	GetWorld()->LineTraceSingleByChannel(Hit,  StartLocation, EndLocation, ECC_Visibility);
-	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red);
-	if (Hit.bBlockingHit)
-	{
-		int32 i = 2;
-		do
-		{
-			if (Character)
-				Character->AddComponentByClass(MeshRef, true, Transform, false);
-		} while (i == 2); // my own do once
-		Transform.SetLocation(Hit.Location);
+	if (Character, MeshRef, NewMesh, PerfectMaterial, BadMaterial){
+		CameraComp = Cast<UCameraComponent>(Character->GetComponentByClass(UCameraComponent::StaticClass()));
+		FHitResult Hit;
+		if (CameraComp){	
+			FVector StartLocation = CameraComp->GetComponentLocation();
+			FVector EndLocation = StartLocation + (CameraComp->GetForwardVector() * 500);
+			GetWorld()->LineTraceSingleByChannel(Hit,  StartLocation, EndLocation, ECC_Visibility);
+			DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red);
+			if (Hit.bBlockingHit)
+			{
+				int32 i = 2;
+				do
+				{
+					if (Character)
+					Character->AddComponentByClass(MeshRef, true, Transform, false);
+					Mesh = NewObject<UStaticMeshComponent>(MeshRef);
+					Mesh->SetStaticMesh(NewMesh);
+				} while (i == 2); // my own do once
+				Transform.SetLocation(Hit.Location);
+
 		
-		MeshRef->SetWorldTransform(Transform);
+		
+				Mesh->SetWorldTransform(Transform);
+				TArray<AActor*> Overlaps;
+				Mesh->GetOverlappingActors(Overlaps);
+		
+				if ((Overlaps.Num() == 0 && CanBuild(Overlaps)) || CanBuild(Overlaps))
+					Mesh->SetMaterial(0, PerfectMaterial);
+				else
+					Mesh->SetMaterial(0, BadMaterial);
+			}
+		}
 	}
+}
+
+bool UPlaceComponent::CanBuild(TArray<AActor*> GetOverlaps)
+{
+	for (auto c : GetOverlaps)
+		if (!(c->IsA(TheGround)))
+			return false;
+	return true;
 }
