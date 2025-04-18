@@ -3,6 +3,11 @@
 
 #include "PlaceComponent.h"
 
+#include "K2Node_DoOnceMultiInput.h"
+#include "Components/StaticMeshComponent.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/Character.h"
+
 // Sets default values for this component's properties
 UPlaceComponent::UPlaceComponent()
 {
@@ -32,3 +37,23 @@ void UPlaceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+void UPlaceComponent::PreviewLoop()
+{
+	FHitResult Hit;
+	FVector StartLocation = CameraComp->GetComponentLocation();
+	FVector EndLocation = StartLocation + (CameraComp->GetForwardVector() * 500);
+	GetWorld()->LineTraceSingleByChannel(Hit,  StartLocation, EndLocation, ECC_Visibility);
+	DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red);
+	if (Hit.bBlockingHit)
+	{
+		int32 i = 2;
+		do
+		{
+			if (Character)
+				Character->AddComponentByClass(MeshRef, true, Transform, false);
+		} while (i == 2); // my own do once
+		Transform.SetLocation(Hit.Location);
+		
+		MeshRef->SetWorldTransform(Transform);
+	}
+}

@@ -16,6 +16,26 @@ public:
 	// Sets default values for this component's properties
 	UPlaceComponent();
 
+	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlaceComponent")
+	ACharacter* Character;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PlaceComponent")
+	TSubclassOf<class UStaticMeshComponent> MeshRef;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
+	class UCameraComponent* CameraComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	FTransform Transform;
+
+	
+
+	UFUNCTION(BlueprintCallable)
+	void PreviewLoop();
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
