@@ -104,7 +104,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "FarmDefense")
 	FORCEINLINE float GetTotalWealth() const { return TotalWealth; }
 
-	UFUNCTION(BlueprintCallable, Category = "FarmDefense")	FORCEINLINE void AddToWealth(float SellPrice){ TotalWealth += SellPrice; }
+	UFUNCTION(BlueprintCallable, Category = "FarmDefense")
+	FORCEINLINE void AddToWealth(float SellPrice){ TotalWealth += SellPrice; }
 
 	UFUNCTION(BlueprintCallable, Category = "FarmDefense")
 	FORCEINLINE void RemoveFromWealth(){ TotalWealth -= GetTotalWealth(); }
