@@ -25,7 +25,7 @@ public:
 	TSubclassOf<class UStaticMeshComponent> MeshRef;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
-	class UCameraComponent* CameraComp;
+	TSubclassOf<class UCameraComponent> CameraComp;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	FTransform Transform;

@@ -10,6 +10,7 @@
 #include "Materials/Material.h"
 #include "Camera/CameraComponent.h"
 #include "Landscape.h"
+#include "LandscapeGizmoActiveActor.h"
 
 #include "Kismet/GameplayStatics.h"
 
@@ -44,12 +45,12 @@ void UPlaceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 void UPlaceComponent::PreviewLoop()
 {
+	UCameraComponent* CamCam = Cast<UCameraComponent>(CameraComp);
 	if (Character, MeshRef, NewMesh, PerfectMaterial, BadMaterial){
-		CameraComp = Cast<UCameraComponent>(Character->GetComponentByClass(UCameraComponent::StaticClass()));
 		FHitResult Hit;
 		if (CameraComp){	
-			FVector StartLocation = CameraComp->GetComponentLocation();
-			FVector EndLocation = StartLocation + (CameraComp->GetForwardVector() * 500);
+			FVector StartLocation = CamCam->GetComponentLocation();
+			FVector EndLocation = StartLocation + (CamCam->GetForwardVector() * 500);
 			GetWorld()->LineTraceSingleByChannel(Hit,  StartLocation, EndLocation, ECC_Visibility);
 			DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor::Red);
 			if (Hit.bBlockingHit)
