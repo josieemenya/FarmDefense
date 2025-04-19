@@ -117,10 +117,15 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 	bool x = Value.Get<bool>();
 	if (x)
 	{
+		
 		if (Cast<ACharacter>(Character) == nullptr)
 		{
-			GetWorld()->SpawnActor<ACharacter>(Character);
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
+
+			FActorSpawnParameters SpawnParameters;
+			SpawnParameters.Owner = this;
+			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+			ACharacter* Peabody = GetWorld()->SpawnActor<ACharacter>(Character, GetActorLocation(), GetActorRotation(), SpawnParameters); 
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
 		}
 		else
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));

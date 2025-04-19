@@ -12,7 +12,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "InputActionValue.h"
 #include "Animation/AnimSequence.h"
-
+#include "GameFramework/SpectatorPawn.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
@@ -110,6 +110,7 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Trigger);
 		EnhancedInputComponent->BindAction(OpenContextMenuAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::OpenContextMenu);
+		EnhancedInputComponent->BindAction(OpenBuildMode, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::StartBuildMode);
 	}
 	else
 	{
@@ -199,6 +200,25 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 		//EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	}
 	
+}
+
+void AFarmDefenseCharacter::StartBuildMode(const FInputActionValue& Value)
+{
+	ASpectatorPawn* BB = Cast<ASpectatorPawn>(BuilderPawn);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	bool x = Value.Get<bool>();
+	if (x && (Controller != nullptr))
+	{
+		if (BB != nullptr)
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
+		else if (BB == nullptr)
+		{
+			BB = GetWorld()->SpawnActor<ASpectatorPawn>(GetActorLocation(), GetActorRotation(), SpawnParams);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
+		}	
+	}	
 }
 
 //  && OverlappingItem->Implements<UInteractInterface>()
