@@ -51,7 +51,7 @@ void ABuilderPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 	if (EEndPlayReason::Destroyed)
 	{
-		UGameplayStatics::GetGameMode(GetWorld())->SetPlayerDefaults(Cast<APawn>(Character));
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
 	} else if (EEndPlayReason::Quit)
 		UE_LOG(LogTemp, Display, TEXT("End Play Quit"));
 }

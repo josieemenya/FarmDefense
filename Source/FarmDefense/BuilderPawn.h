@@ -32,7 +32,7 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	ABuilderPawn();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
-	ACharacter* Character;
+	TSubclassOf<class ACharacter> Character;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* BuilderMapping;
