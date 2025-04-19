@@ -67,6 +67,7 @@ ABuilderPawn::ABuilderPawn()
 {
 	Camera = CreateDefaultSubobject<UCameraComponent>(FName("Camera"));
 	Camera->SetupAttachment(GetRootComponent());
+	Peabody = Cast<ACharacter>(Character);
 }
 
 void ABuilderPawn::Build(const FInputActionValue& Value)
@@ -118,17 +119,17 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 	if (x)
 	{
 		
-		if (Cast<ACharacter>(Character) == nullptr)
+		if (Peabody == nullptr || !Peabody->IsValidLowLevel() || !Peabody->IsInLevel(GetWorld()->GetCurrentLevel()))
 		{
 
 			FActorSpawnParameters SpawnParameters;
 			SpawnParameters.Owner = this;
 			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-			ACharacter* Peabody = GetWorld()->SpawnActor<ACharacter>(Character, GetActorLocation(), GetActorRotation(), SpawnParameters); 
+			Peabody = GetWorld()->SpawnActor<ACharacter>(Character, GetActorLocation(), GetActorRotation(), SpawnParameters); 
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
 		}
 		else
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
 		Destroy();
 	}	
 }
