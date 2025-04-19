@@ -129,8 +129,9 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
 		}
 		else
+		{
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
-		Destroy();
+		}//Destroy();
 	}	
 }
 

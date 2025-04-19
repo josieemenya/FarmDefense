@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
+
 #include "GameFramework/SpectatorPawn.h"
 #include "BuilderPawn.generated.h"
 
@@ -31,6 +32,8 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 
 	ABuilderPawn();
 
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
 	TSubclassOf<class ACharacter> Character;
 	
@@ -51,6 +54,9 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	ACharacter* Peabody;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	FVector PreviousLocation; 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
