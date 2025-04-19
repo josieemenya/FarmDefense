@@ -51,6 +51,7 @@ void ABuilderPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 	if (EEndPlayReason::Destroyed)
 	{
+		
 		if (Cast<ACharacter>(Character) == nullptr)
 		{
 			GetWorld()->SpawnActor<ACharacter>(Character);
@@ -115,6 +116,15 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 {
 	bool x = Value.Get<bool>();
 	if (x)
+	{
+		if (Cast<ACharacter>(Character) == nullptr)
+		{
+			GetWorld()->SpawnActor<ACharacter>(Character);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
+		}
+		else
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
 		Destroy();
+	}	
 }
 
