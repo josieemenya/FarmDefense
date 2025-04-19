@@ -60,7 +60,7 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	void Move(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
-	void LookUp(const FInputActionValue& Value);
+	void Look(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable)
 	void ExitBuildMode(const FInputActionValue& Value);

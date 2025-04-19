@@ -51,7 +51,13 @@ void ABuilderPawn::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason);
 	if (EEndPlayReason::Destroyed)
 	{
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
+		if (Cast<ACharacter>(Character) == nullptr)
+		{
+			GetWorld()->SpawnActor<ACharacter>(Character);
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
+		}
+		else
+			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
 	} else if (EEndPlayReason::Quit)
 		UE_LOG(LogTemp, Display, TEXT("End Play Quit"));
 }
@@ -91,7 +97,7 @@ void ABuilderPawn::Move(const FInputActionValue& Value)
 	}
 }
 
-void ABuilderPawn::LookUp(const FInputActionValue& Value)
+void ABuilderPawn::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
@@ -100,7 +106,8 @@ void ABuilderPawn::LookUp(const FInputActionValue& Value)
 		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
-	}
+	} else
+		UE_LOG(LogTemp, Display, TEXT("Look Up Look"));
 }
 
 void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
