@@ -39,7 +39,7 @@ void ABuilderPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(IA_Build, ETriggerEvent::Triggered, this, &ABuilderPawn::Build);
-		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ABuilderPawn::LookUp);
+		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ABuilderPawn::Look);
 		EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ABuilderPawn::Move);
 		EnhancedInputComponent->BindAction(IA_ExitBuild, ETriggerEvent::Triggered, this, &ABuilderPawn::ExitBuildMode);
 	}
@@ -70,6 +70,7 @@ ABuilderPawn::ABuilderPawn()
 
 void ABuilderPawn::Build(const FInputActionValue& Value)
 {
+	//GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "Build");
 	bool x = Value.Get<bool>();
 	if (x)
 		GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "Build");
