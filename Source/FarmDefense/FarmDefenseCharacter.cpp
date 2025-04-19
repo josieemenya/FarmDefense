@@ -215,7 +215,7 @@ void AFarmDefenseCharacter::StartBuildMode(const FInputActionValue& Value)
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
 		else if (BB == nullptr)
 		{
-			BB = GetWorld()->SpawnActor<ASpectatorPawn>(GetActorLocation(), GetActorRotation(), SpawnParams);
+			BB = GetWorld()->SpawnActor<ASpectatorPawn>(BuilderPawn, GetActorLocation(), GetActorRotation(), SpawnParams);
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
 		}	
 	}	
