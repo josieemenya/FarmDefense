@@ -144,7 +144,7 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Display, TEXT("Brooooooo"));
 		EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 	} 
-	if (!isCharacterInLevel()) // character is in level
+	if (Cast<ACharacter>(Character) == nullptr) // character is in level
 	{
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = this;
