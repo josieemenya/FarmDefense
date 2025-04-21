@@ -18,6 +18,7 @@
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
+#include "Engine/Level.h"
 #include "GameFramework/GameModeBase.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -80,9 +81,9 @@ ABuilderPawn::ABuilderPawn()
 
 bool ABuilderPawn::isCharacterInLevel()
 {
-	for (auto c : GetWorld()->GetCurrentLevel()->Actors)
+	for (auto &c : GetWorld()->GetCurrentLevel()->Actors)
 		{
-			if ( c->IsA(Character))
+			if ( c->IsA(Character.Get()))
 			{
 				UE_LOG(LogTemp, Warning, TEXT("Character is already in level"));
 				return true;	
@@ -146,6 +147,7 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 	} 
 	if (Cast<ACharacter>(Character) == nullptr) // character is in level
 	{
+		GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "We cooked broooo");
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = this;
 		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
@@ -154,6 +156,7 @@ void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 		//Destroy();
 	} else
 	{
+		GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "Sumthins up broooo");
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
 	}
 }

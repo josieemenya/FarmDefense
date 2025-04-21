@@ -17,7 +17,5 @@ void AEnemySpawn::OnPossess(APawn* ControlledPawn)
 {
 	
 	(EnemyTree)? GEngine->AddOnScreenDebugMessage(14, 10.f, FColor::MakeRandomColor(), TEXT("WeRun")) : GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("We Fall"));
-	
-	//MoveToActor(Player, 100.f);
 
 }
