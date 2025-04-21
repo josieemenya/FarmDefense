@@ -211,14 +211,13 @@ void AFarmDefenseCharacter::StartBuildMode(const FInputActionValue& Value)
 	bool x = Value.Get<bool>();
 	if (x && (Controller != nullptr))
 	{
-		if (BB != nullptr)
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
-		else if (BB == nullptr)
-		{
 			BB = GetWorld()->SpawnActor<ASpectatorPawn>(BuilderPawn, GetActorLocation(), GetActorRotation(), SpawnParams);
 			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
-		}	
-	}	
+			//Destroy();
+	}	else if (BB->IsInLevel(GetWorld()->GetCurrentLevel()))
+	{
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
+	}
 }
 
 //  && OverlappingItem->Implements<UInteractInterface>()

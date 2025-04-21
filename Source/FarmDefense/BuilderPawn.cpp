@@ -27,6 +27,12 @@ void ABuilderPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "BeginPlay");
+	
+}
+
+void ABuilderPawn::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
 }
 
 void ABuilderPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
@@ -34,8 +40,10 @@ void ABuilderPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 	//Super::SetupPlayerInputComponent(PlayerInputComponent);
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 		if (UEnhancedInputLocalPlayerSubsystem* PawnSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+		{
+			PawnSubsystem->ClearAllMappings();
 			PawnSubsystem->AddMappingContext(BuilderMapping, 0);
-
+		}
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{
 		EnhancedInputComponent->BindAction(IA_Build, ETriggerEvent::Triggered, this, &ABuilderPawn::Build);
@@ -68,6 +76,19 @@ ABuilderPawn::ABuilderPawn()
 	Camera = CreateDefaultSubobject<UCameraComponent>(FName("Camera"));
 	Camera->SetupAttachment(GetRootComponent());
 	Peabody = Cast<ACharacter>(Character);
+}
+
+bool ABuilderPawn::isCharacterInLevel()
+{
+	for (auto c : GetWorld()->GetCurrentLevel()->Actors)
+		{
+			if ( c->IsA(Character))
+			{
+				UE_LOG(LogTemp, Warning, TEXT("Character is already in level"));
+				return true;	
+			}
+		}
+		return false;
 }
 
 void ABuilderPawn::Build(const FInputActionValue& Value)
@@ -115,23 +136,25 @@ void ABuilderPawn::Look(const FInputActionValue& Value)
 
 void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
 {
+	
+	UE_LOG(LogTemp, Display, TEXT("Mister Peabody and Sherman"));
 	bool x = Value.Get<bool>();
-	if (x)
+	if (Controller != UGameplayStatics::GetPlayerController(GetWorld(), 0))
 	{
+		UE_LOG(LogTemp, Display, TEXT("Brooooooo"));
+		EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	} 
+	if (!isCharacterInLevel()) // character is in level
+	{
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		Peabody = GetWorld()->SpawnActor<ACharacter>(Character, GetActorLocation(), GetActorRotation(), SpawnParameters); 
 		
-		if (Peabody == nullptr || !Peabody->IsValidLowLevel() || !Peabody->IsInLevel(GetWorld()->GetCurrentLevel()))
-		{
-
-			FActorSpawnParameters SpawnParameters;
-			SpawnParameters.Owner = this;
-			SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-			Peabody = GetWorld()->SpawnActor<ACharacter>(Character, GetActorLocation(), GetActorRotation(), SpawnParameters); 
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
-		}
-		else
-		{
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Peabody);
-		}//Destroy();
-	}	
+		//Destroy();
+	} else
+	{
+		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
+	}
 }
 

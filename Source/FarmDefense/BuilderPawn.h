@@ -20,6 +20,8 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	protected:
 	virtual void BeginPlay() override;
 
+	virtual void Tick(float DeltaTime) override;
+
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -34,9 +36,14 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 
 	
 	
+
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
 	TSubclassOf<class ACharacter> Character;
-	
+
+	UFUNCTION()
+	bool isCharacterInLevel();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* BuilderMapping;
 
