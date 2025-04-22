@@ -57,8 +57,6 @@ class AFarmDefenseCharacter : public ACharacter, public SimpleMacros
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* OpenContextMenuAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* OpenBuildMode;
 
 public:
 	AFarmDefenseCharacter();
@@ -82,8 +80,7 @@ protected:
 	void Trigger(const FInputActionValue& Value);
 
 	void OpenContextMenu(const FInputActionValue& Value);
-
-	void StartBuildMode(const FInputActionValue& Value);
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	int32 Actions;

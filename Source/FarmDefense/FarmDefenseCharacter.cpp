@@ -110,7 +110,6 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Trigger);
 		EnhancedInputComponent->BindAction(OpenContextMenuAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::OpenContextMenu);
-		EnhancedInputComponent->BindAction(OpenBuildMode, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::StartBuildMode);
 	}
 	else
 	{
@@ -202,23 +201,7 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 	
 }
 
-void AFarmDefenseCharacter::StartBuildMode(const FInputActionValue& Value)
-{
-	ASpectatorPawn* BB = Cast<ASpectatorPawn>(BuilderPawn);
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-	bool x = Value.Get<bool>();
-	if (x && (Controller != nullptr))
-	{
-			BB = GetWorld()->SpawnActor<ASpectatorPawn>(BuilderPawn, GetActorLocation(), GetActorRotation(), SpawnParams);
-			UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
-			//Destroy();
-	}	else if (BB->IsInLevel(GetWorld()->GetCurrentLevel()))
-	{
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(BB);
-	}
-}
+
 
 //  && OverlappingItem->Implements<UInteractInterface>()
 //IInteractInterface::Execute_Action(OverlappingItem); 
