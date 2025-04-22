@@ -19,6 +19,7 @@ class FARMDEFENSE_API APestControl : public AAIController
 	
 	virtual void OnPossess(APawn* ControlledPawn) override;
 
+<<<<<<<< HEAD:Source/FarmDefense/PestControl.h
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* BehaviorTree;
 
@@ -26,5 +27,7 @@ class FARMDEFENSE_API APestControl : public AAIController
 	class UBlackboardComponent* BlackboardB;
 
 	TSubclassOf<AActor> MyPlayer;
+========
+>>>>>>>> bce71d8aed7878e8da15f7bba09be73268b850ba:Source/FarmDefense/EnemySpawn.h
 	
 };
