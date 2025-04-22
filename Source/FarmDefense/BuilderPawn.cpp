@@ -50,7 +50,7 @@ void ABuilderPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(IA_Build, ETriggerEvent::Triggered, this, &ABuilderPawn::Build);
 		EnhancedInputComponent->BindAction(IA_Look, ETriggerEvent::Triggered, this, &ABuilderPawn::Look);
 		EnhancedInputComponent->BindAction(IA_Move, ETriggerEvent::Triggered, this, &ABuilderPawn::Move);
-		EnhancedInputComponent->BindAction(IA_ExitBuild, ETriggerEvent::Triggered, this, &ABuilderPawn::ExitBuildMode);
+		
 	}
 	
 }
@@ -79,18 +79,6 @@ ABuilderPawn::ABuilderPawn()
 	Peabody = Cast<ACharacter>(Character);
 }
 
-bool ABuilderPawn::isCharacterInLevel()
-{
-	for (auto &c : GetWorld()->GetCurrentLevel()->Actors)
-		{
-			if ( c->IsA(Character.Get()))
-			{
-				UE_LOG(LogTemp, Warning, TEXT("Character is already in level"));
-				return true;	
-			}
-		}
-		return false;
-}
 
 void ABuilderPawn::Build(const FInputActionValue& Value)
 {
@@ -135,29 +123,4 @@ void ABuilderPawn::Look(const FInputActionValue& Value)
 		UE_LOG(LogTemp, Display, TEXT("Look Up Look"));
 }
 
-void ABuilderPawn::ExitBuildMode(const FInputActionValue& Value)
-{
-	
-	UE_LOG(LogTemp, Display, TEXT("Mister Peabody and Sherman"));
-	bool x = Value.Get<bool>();
-	if (Controller != UGameplayStatics::GetPlayerController(GetWorld(), 0))
-	{
-		UE_LOG(LogTemp, Display, TEXT("Brooooooo"));
-		EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
-	} 
-	if (Cast<ACharacter>(Character) == nullptr) // character is in level
-	{
-		GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "We cooked broooo");
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.Owner = this;
-		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		Peabody = GetWorld()->SpawnActor<ACharacter>(Character, GetActorLocation(), GetActorRotation(), SpawnParameters); 
-		
-		//Destroy();
-	} else
-	{
-		GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "Sumthins up broooo");
-		UGameplayStatics::GetPlayerController(GetWorld(), 0)->Possess(Cast<ACharacter>(Character));
-	}
-}
 

@@ -36,6 +36,7 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 
 	
 	
+	
 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
@@ -55,9 +56,7 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* IA_Look;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* IA_ExitBuild;
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	ACharacter* Peabody;
@@ -77,7 +76,6 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& Value);
 
-	UFUNCTION(BlueprintCallable)
-	void ExitBuildMode(const FInputActionValue& Value);
+
 	
 };
