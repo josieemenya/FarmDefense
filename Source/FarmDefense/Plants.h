@@ -20,10 +20,10 @@ public:
 	APlants();
 
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Catergory = "FarmDefense")
-	bool Daytime;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	bool bDaytime;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Catergory = "FarmDefense")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	bool Nighttime;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
