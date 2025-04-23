@@ -19,12 +19,20 @@ public:
 	// Sets default values for this actor's properties
 	APlants();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsDay;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsNight;
+
+	UFUNCTION(BlueprintCallable)
+	void bIsDaytime();
+
+	UFUNCTION(BlueprintCallable)
+	void bIsNighttime();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
-	bool bDaytime;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
-	bool Nighttime;
+	FColor LightColour;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float PlantHealth;
@@ -82,6 +90,8 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorOnClicked(FKey ButtonPressed = EKeys::LeftMouseButton) override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 	
 	
 public:	

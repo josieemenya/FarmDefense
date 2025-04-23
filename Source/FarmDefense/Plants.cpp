@@ -8,6 +8,8 @@
 #include "Engine/DirectionalLight.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
+#include "EngineUtils.h"
+#include "TimerManager.h"
 #include "Kismet/GameplayStatics.h"
 // Sets default values
 APlants::APlants()
@@ -17,7 +19,10 @@ APlants::APlants()
 	MaxPlantHealth = 100;
 	PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
 	PlantBody->SetupAttachment(GetRootComponent());
+	FTimerHandle TimerHandle;
+	FTimerHandle TimerHandle2;
 	
+//	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bIsNighttime, 2.f, true);
 
 }
 
@@ -28,6 +33,11 @@ void APlants::Action_Implementation()
 	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
 }
 
+void APlants::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+}
+
 
 
 // Called when the game starts or when spawned
@@ -35,14 +45,18 @@ void APlants::BeginPlay()
 {
 	Super::BeginPlay();
 	PlantHealth = MaxPlantHealth;
-	//SunLight = UGameplayStatics::GetAllActorsOfClass(GetWorld(), SunLightClass, );
-	//SunLight = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), SunLightClass));
-	if (SunLight)
+	LightColour = FColor(0.019382, 0.031896, 0.074214);
+	for (TActorIterator<ADirectionalLight> DirectionalLightIter(GetWorld()); DirectionalLightIter; ++DirectionalLightIter)
 	{
-		SunLight->SetBrightness(4.f);
-	} else
-	{
-		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("Unable To Resolve"));
+
+		if (ADirectionalLight* DirectionalLight = Cast<ADirectionalLight>(*DirectionalLightIter))
+		{
+			GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("Found Sunlight"));
+			SunLight = DirectionalLight;
+		} else
+		{
+			GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::MakeRandomColor(), TEXT("No Sunlight"));
+		}
 	}
 }
 
@@ -59,7 +73,25 @@ void APlants::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	((SunLight->GetBrightness() == 0.f)) ? Nighttime = true : Nighttime = false;
+	//((SunLight->GetBrightness() == 0.f)) ? Nighttime = true : Nighttime = false;
 	
+}
+
+void APlants::bIsDaytime()
+{
+	if (SunLight->GetBrightness() > 0.5f)
+	{
+		bIsDay = true;
+	}
+}
+
+void APlants::bIsNighttime()
+{
+	if (SunLight->GetBrightness() <  0.5f)
+	{
+		//SunLight->SetLightColor(LightColour);
+		bIsNight = true;
+	}
+
 }
 
