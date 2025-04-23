@@ -36,7 +36,7 @@ void APlants::BeginPlay()
 	Super::BeginPlay();
 	PlantHealth = MaxPlantHealth;
 	//SunLight = UGameplayStatics::GetAllActorsOfClass(GetWorld(), SunLightClass, );
-	SunLight = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), SunLightClass));
+	//SunLight = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), SunLightClass));
 	if (SunLight)
 	{
 		SunLight->SetBrightness(4.f);
