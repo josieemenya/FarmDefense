@@ -22,17 +22,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsDay;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsNight;
-
 	UFUNCTION(BlueprintCallable)
 	void bIsDaytime();
 
 	UFUNCTION(BlueprintCallable)
-	void bIsNighttime();
+	void bCanGrow();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	FColor LightColour;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	bool bIsDamaged;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	float DaytimeManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	float NightManager;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float PlantHealth;

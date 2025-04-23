@@ -19,10 +19,7 @@ APlants::APlants()
 	MaxPlantHealth = 100;
 	PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
 	PlantBody->SetupAttachment(GetRootComponent());
-	FTimerHandle TimerHandle;
-	FTimerHandle TimerHandle2;
 	
-//	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bIsNighttime, 2.f, true);
 
 }
 
@@ -36,6 +33,7 @@ void APlants::Action_Implementation()
 void APlants::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
+	GetWorld()->GetTimerManager().ClearAllTimersForObject(this);
 }
 
 
@@ -45,7 +43,13 @@ void APlants::BeginPlay()
 {
 	Super::BeginPlay();
 	PlantHealth = MaxPlantHealth;
-	LightColour = FColor(0.019382, 0.031896, 0.074214);
+	LightColour = FColor(38, 58, 150);
+	GEngine->AddOnScreenDebugMessage(10, 10.f, LightColour, TEXT("Testing Light Colour"));
+	FTimerHandle TimerHandle;
+	FTimerHandle TimerHandle2;
+	
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 1.f, true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 30.f, true);
 	for (TActorIterator<ADirectionalLight> DirectionalLightIter(GetWorld()); DirectionalLightIter; ++DirectionalLightIter)
 	{
 
@@ -53,6 +57,8 @@ void APlants::BeginPlay()
 		{
 			GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("Found Sunlight"));
 			SunLight = DirectionalLight;
+			//SunLight->SetBrightness(0.08f);
+			//SunLight->SetLightColor(LightColour);
 		} else
 		{
 			GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::MakeRandomColor(), TEXT("No Sunlight"));
@@ -82,15 +88,19 @@ void APlants::bIsDaytime()
 	if (SunLight->GetBrightness() > 0.5f)
 	{
 		bIsDay = true;
+		GEngine->AddOnScreenDebugMessage(12, 4.f, FColor::MakeRandomColor(), TEXT("daylight"));
 	}
 }
 
-void APlants::bIsNighttime()
+void APlants::bCanGrow()
 {
-	if (SunLight->GetBrightness() <  0.5f)
+	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && hasBeenWatered)
 	{
-		//SunLight->SetLightColor(LightColour);
-		bIsNight = true;
+		if (DaysToGrow > 0)
+			--DaysToGrow;
+		else
+			readyforHarvest = true;
+		
 	}
 
 }
