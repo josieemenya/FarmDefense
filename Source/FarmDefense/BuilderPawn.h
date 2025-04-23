@@ -42,9 +42,6 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Components")
 	TSubclassOf<class ACharacter> Character;
 
-	UFUNCTION()
-	bool isCharacterInLevel();
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputMappingContext* BuilderMapping;
 
