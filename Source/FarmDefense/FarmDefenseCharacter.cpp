@@ -78,7 +78,61 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
-	 
+	PlayerStatsInfo = FPlayerInfo(100, 0);
+}
+
+void AFarmDefenseCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	if (NewController == UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	{
+		
+		TheHUD = CreateWidget<UUserWidget>(GetWorld(), TheHUDClass);
+		TheHUD->Construct();
+		TheHUD->AddToViewport();
+	}
+}
+
+void AFarmDefenseCharacter::UnPossessed()
+{
+	Super::UnPossessed();
+	TheHUD->RemoveFromParent();
+	TheHUD->Destruct();
+	// replace remove from parent w/ remove from viewport if it doesn't work, 
+}
+
+float AFarmDefenseCharacter::GetTotalWealth_Implementation()
+{
+	return this->PlayerStatsInfo.TotalWealth;
+}
+
+void AFarmDefenseCharacter::AddTotalWealth_Implementation(float MoneyAdded)
+{
+	this->PlayerStatsInfo.TotalWealth += MoneyAdded;
+}
+
+void AFarmDefenseCharacter::TakeAwayWealth_Implementation(float MoneyTakenAway)
+{
+	this->PlayerStatsInfo.TotalWealth -= MoneyTakenAway;
+}
+
+int32 AFarmDefenseCharacter::GetTotalDays_Implementation()
+{
+	return this->PlayerStatsInfo.TotalDays;
+}
+
+/*void AFarmDefenseCharacter::AddToInventory(FPlayerInfo& PlayerStats, AActor* InventoryActor)
+{
+	if (InventoryActor != nullptr)
+	{
+		// if size is not over certain size, if actor is not in inventor/has tag stackable; yadda yadda
+		PlayerStats.Inventory.Add(InventoryActor);
+	}
+}*/
+
+void AFarmDefenseCharacter::TheNextDay_Implementation()
+{
+	++this->PlayerStatsInfo.TotalDays;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -91,6 +145,7 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 	{
 		if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
+			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}

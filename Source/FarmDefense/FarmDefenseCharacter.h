@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InteractInterface.h"
-
+#include "StatsInterface.h"
 #include "Logging/LogMacros.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "SimpleMacros.h"
@@ -21,11 +21,12 @@ class UUserWidget;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AFarmDefenseCharacter : public ACharacter, public SimpleMacros
+class AFarmDefenseCharacter : public ACharacter, public SimpleMacros, public IStatsInterface
 {
 	GENERATED_BODY()
 
 	class USkeletalMeshComponent* Mesh;
+	
 	
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -61,7 +62,8 @@ class AFarmDefenseCharacter : public ACharacter, public SimpleMacros
 public:
 	AFarmDefenseCharacter();
 
-
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Player)
+	FPlayerInfo PlayerStatsInfo; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* OverlapSphere;
@@ -98,32 +100,42 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
+	virtual void PossessedBy(AController* NewController) override;
+	virtual void UnPossessed() override;
+
 	AActor* OverlappingActor {nullptr};
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	double TotalWealth {};
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	int32 DaysSpent;
-
 public:
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "FarmDefense")
-	FORCEINLINE float GetTotalWealth() const { return TotalWealth; }
 
-	UFUNCTION(BlueprintCallable, Category = "FarmDefense")
-	FORCEINLINE void AddToWealth(float SellPrice){ TotalWealth += SellPrice; }
+	UFUNCTION(BlueprintPure)
+	virtual float GetTotalWealth_Implementation() override;
 
-	UFUNCTION(BlueprintCallable, Category = "FarmDefense")
-	FORCEINLINE void RemoveFromWealth(){ TotalWealth -= GetTotalWealth(); }
+	UFUNCTION(BlueprintCallable)
+	virtual void AddTotalWealth_Implementation(float MoneyAdded) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	TArray<AActor*> Inventory;
+	UFUNCTION(BlueprintCallable)
+	virtual void TakeAwayWealth_Implementation(float MoneyTakenAway) override;
+
+	UFUNCTION(BlueprintPure)
+	virtual int32 GetTotalDays_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void TheNextDay_Implementation();
+
+	//UFUNCTION(BlueprintCallable)
+	//void AddToInventory(FPlayerInfo& PlayerStats, AActor* InventoryActor) override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FarmDefense")
 	TSubclassOf<UUserWidget> ContextMenuWidgetClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	UUserWidget* ContextMenuWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	TSubclassOf<UUserWidget> TheHUDClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	UUserWidget* TheHUD;
 	
 public:
 	/** Returns CameraBoom subobject **/
@@ -139,4 +151,6 @@ public:
 	
 	
 };
+
+
 

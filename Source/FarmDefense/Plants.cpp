@@ -3,7 +3,12 @@
 
 #include "Plants.h"
 #include "Materials/Material.h"
+#include "Components/DirectionalLightComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Engine/DirectionalLight.h"
+#include "Engine/Engine.h"
+#include "Engine/World.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 APlants::APlants()
 {
@@ -12,6 +17,7 @@ APlants::APlants()
 	MaxPlantHealth = 100;
 	PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
 	PlantBody->SetupAttachment(GetRootComponent());
+	
 
 }
 
@@ -29,7 +35,15 @@ void APlants::BeginPlay()
 {
 	Super::BeginPlay();
 	PlantHealth = MaxPlantHealth;
-	
+	//SunLight = UGameplayStatics::GetAllActorsOfClass(GetWorld(), SunLightClass, );
+	SunLight = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), SunLightClass));
+	if (SunLight)
+	{
+		SunLight->SetBrightness(4.f);
+	} else
+	{
+		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("Unable To Resolve"));
+	}
 }
 
 
@@ -45,7 +59,7 @@ void APlants::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	((SunLight->GetBrightness() == 0.f)) ? Nighttime = true : Nighttime = false;
 	
-
 }
 

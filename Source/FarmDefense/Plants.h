@@ -8,7 +8,9 @@
 #include "InputCoreTypes.h"
 #include "Plants.generated.h"
 
+class ADirectionalLight;
 UCLASS()
+
 class FARMDEFENSE_API APlants : public AActor, public IInteractInterface
 {
 	GENERATED_BODY()
@@ -17,6 +19,12 @@ public:
 	// Sets default values for this actor's properties
 	APlants();
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Catergory = "FarmDefense")
+	bool Daytime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Catergory = "FarmDefense")
+	bool Nighttime;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float PlantHealth;
@@ -44,6 +52,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float MaxSellPrince;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<ADirectionalLight> SunLightClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	ADirectionalLight* SunLight;
+	
+
 	public:
 	//UFUNCTION(BlueprintCallable, Category = "FarmDefense")
 	//float GetSellPrince() const { return SellPrice; } // should have many factors for sell price
@@ -67,6 +82,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	virtual void NotifyActorOnClicked(FKey ButtonPressed = EKeys::LeftMouseButton) override;
+	
 	
 public:	
 	// Called every frame

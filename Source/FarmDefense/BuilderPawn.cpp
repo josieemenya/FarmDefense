@@ -43,7 +43,7 @@ void ABuilderPawn::SetupPlayerInputComponent(class UInputComponent* PlayerInputC
 		if (UEnhancedInputLocalPlayerSubsystem* PawnSubsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
 		{
 			PawnSubsystem->ClearAllMappings();
-			PawnSubsystem->AddMappingContext(BuilderMapping, 0);
+			PawnSubsystem->AddMappingContext(BuilderMapping, 1);
 		}
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent))
 	{

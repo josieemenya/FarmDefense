@@ -21,8 +21,6 @@ void AEnemies::BeginPlay()
 	Super::BeginPlay();
 	enemy_stats = FEnemyStats(100, 100);
 
-	
-	
 }
 
 // Called every frame
