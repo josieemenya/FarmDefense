@@ -52,7 +52,7 @@ void APlants::Action_Implementation()
 	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
 	if (GetOverlappingActor() != nullptr && GetOverlappingActor()->Implements<UStatsInterface>())
 	{
-		IStatsInterface::Execute_ChangeInStamina(GetOverlappingActor(), -1 * StaminaCost);
+		IStatsInterface::Execute_TakeStamina(GetOverlappingActor(), -1 * StaminaCost);
 		GEngine->AddOnScreenDebugMessage(32, 20.f, FColor::MakeRandomColor(), TEXT("nbjwWaterPlant_Implementation"));
 	}
 }

@@ -1,3 +1,5 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
 #pragma once
 
 #include "CoreMinimal.h"
@@ -98,16 +100,12 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 
-	
-
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 
 	AActor* OverlappingActor {nullptr};
 
 public:
-	
-	
 	// interface methods, maybe i should done differently, is getting kind of tedious
 	UFUNCTION(BlueprintPure)
 	virtual float GetTotalWealth_Implementation() override;
@@ -138,9 +136,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ChangeInHealth_Implementation(float Change) override;
-
-	UFUNCTION(BlueprintCallable)
-	virtual void ChangeInStamina(float Cost) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void HealHealth_Implementation(float HealPoint) override;
@@ -178,8 +173,6 @@ public:
 	
 	
 };
-
-#
 
 
 
