@@ -17,6 +17,18 @@ class UStatsInterface : public UInterface
 USTRUCT(BlueprintType)
 struct FPlayerInfo {
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Health;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHealth;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxStamina;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TotalWealth;
@@ -24,8 +36,8 @@ struct FPlayerInfo {
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 TotalDays;
 
-	FPlayerInfo(){};
-	FPlayerInfo(float TWealth, int32 TDays) : TotalWealth(TWealth), TotalDays(TDays) {};
+	FPlayerInfo() = default;
+	FPlayerInfo(float PHealth, float PMaxHealth, float PStamina, float PMaxStamina, float TWealth, int32 TDays) : Health(PHealth), MaxHealth(PMaxHealth), Stamina(PStamina), MaxStamina(PMaxStamina), TotalWealth(TWealth), TotalDays(TDays) {};
 };
 
 
@@ -56,6 +68,37 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	int32 GetTotalDays();
+
+	UFUNCTION(BlueprintNativeEvent)
+	float GetHealth();
+
+	UFUNCTION(BlueprintNativeEvent)
+	float GetMaxHealth();
+
+	UFUNCTION(BlueprintNativeEvent)
+	float GetStamina();
+
+	UFUNCTION(BlueprintNativeEvent)
+	float GetMaxStamina();
+
+	UFUNCTION(BlueprintNativeEvent)
+	void ChangeInHealth(float Change);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void HealHealth(float HealPoint);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void TakeHealth(float DamagePoint);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void ChangeInStamina(float Cost);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void HealStamina(float HealPoint);
+
+	UFUNCTION(BlueprintNativeEvent)
+	void TakeStamina(float DamagePoint);
+	
 
 	
 };

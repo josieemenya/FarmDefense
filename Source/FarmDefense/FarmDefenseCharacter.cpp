@@ -78,7 +78,7 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
-	PlayerStatsInfo = FPlayerInfo(100, 0);
+	PlayerStatsInfo = FPlayerInfo(100, 100, 100, 100, 100, 0);
 }
 
 void AFarmDefenseCharacter::PossessedBy(AController* NewController)
@@ -133,6 +133,41 @@ int32 AFarmDefenseCharacter::GetTotalDays_Implementation()
 void AFarmDefenseCharacter::TheNextDay_Implementation()
 {
 	++this->PlayerStatsInfo.TotalDays;
+}
+
+float AFarmDefenseCharacter::GetHealth_Implementation()
+{
+	return this->PlayerStatsInfo.Health;
+}
+
+float AFarmDefenseCharacter::GetMaxHealth_Implementation()
+{
+	return this->PlayerStatsInfo.MaxHealth;
+}
+
+float AFarmDefenseCharacter::GetStamina_Implementation()
+{
+	return this->PlayerStatsInfo.Stamina;
+}
+
+float AFarmDefenseCharacter::GetMaxStamina_Implementation()
+{
+	return this->PlayerStatsInfo.MaxStamina;
+}
+
+void AFarmDefenseCharacter::ChangeInHealth_Implementation(float Change)
+{
+	(Change > 0)? HealHealth_Implementation(Change) : TakeHealth_Implementation(Change);
+}
+
+void AFarmDefenseCharacter::HealHealth_Implementation(float HealPoint)
+{
+	this->PlayerStatsInfo.Health += HealPoint;
+}
+
+void AFarmDefenseCharacter::TakeHealth_Implementation(float DamagePoint)
+{
+	this->PlayerStatsInfo.Health += DamagePoint;
 }
 
 //////////////////////////////////////////////////////////////////////////

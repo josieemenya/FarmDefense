@@ -106,7 +106,7 @@ protected:
 	AActor* OverlappingActor {nullptr};
 
 public:
-
+	// interface methods, maybe i should done differently, is getting kind of tedious
 	UFUNCTION(BlueprintPure)
 	virtual float GetTotalWealth_Implementation() override;
 
@@ -120,7 +120,28 @@ public:
 	virtual int32 GetTotalDays_Implementation() override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void TheNextDay_Implementation();
+	virtual void TheNextDay_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetHealth_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetMaxHealth_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetStamina_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual float GetMaxStamina_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ChangeInHealth_Implementation(float Change) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void HealHealth_Implementation(float HealPoint) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void TakeHealth_Implementation(float DamagePoint) override; 
 
 	//UFUNCTION(BlueprintCallable)
 	//void AddToInventory(FPlayerInfo& PlayerStats, AActor* InventoryActor) override;
