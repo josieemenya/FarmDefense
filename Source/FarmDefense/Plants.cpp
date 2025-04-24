@@ -43,16 +43,18 @@ void APlants::GetDaysLeft_Implementation()
 void APlants::WaterPlant_Implementation()
 {
 	this->PlantInfo.hasBeenWatered = true;
-	if (this->PlantInfo.hasBeenWatered && OverlappingActor != nullptr && OverlappingActor->Implements<UStatsInterface>())
-	{
-		IStatsInterface::Execute_TakeStamina(GetOverlappingActor(), -1 * StaminaCost);
-	}
+	
 }
 
 void APlants::Action_Implementation()
 {
 	(PlantInfo.hasBeenWatered) ? --PlantInfo.DaysToGrow : PlantInfo.DaysToGrow;
 	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
+	if (GetOverlappingActor() != nullptr && GetOverlappingActor()->Implements<UStatsInterface>())
+	{
+		IStatsInterface::Execute_TakeStamina(GetOverlappingActor(), -1 * StaminaCost);
+		GEngine->AddOnScreenDebugMessage(32, 20.f, FColor::MakeRandomColor(), TEXT("nbjwWaterPlant_Implementation"));
+	}
 }
 
 void APlants::EndPlay(const EEndPlayReason::Type EndPlayReason)

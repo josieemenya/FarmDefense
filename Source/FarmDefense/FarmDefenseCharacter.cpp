@@ -252,12 +252,16 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 	{
 		if(Triggered && GetOverlappingActor())
 		{
-			if(GetOverlappingActor()->Implements<UInteractInterface>() && WaterPlant)
+			if(GetOverlappingActor()->Implements<UInteractInterface>())
 			{
-				Mesh->PlayAnimation(WaterPlant, false); 
-				IInteractInterface::Execute_Action(GetOverlappingActor());
+				bBeginAnim = true;
+				
 				if (GetOverlappingActor()->Implements<UPlantInterface>())
+				{
 					IPlantInterface::Execute_WaterPlant(GetOverlappingActor());
+					IInteractInterface::Execute_Action(GetOverlappingActor());
+					GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
+				}
 			} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
 		} else
 		{

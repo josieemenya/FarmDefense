@@ -158,7 +158,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	UUserWidget* TheHUD;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	bool bBeginAnim; 
 	
 public:
 	/** Returns CameraBoom subobject **/
@@ -168,9 +169,7 @@ public:
 
 	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
 	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
-
-	UPROPERTY(EditAnywhere)
-	class UAnimSequence* WaterPlant; 
+	
 	
 	
 };
