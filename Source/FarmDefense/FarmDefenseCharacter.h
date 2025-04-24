@@ -133,6 +133,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual float GetMaxStamina_Implementation() override;
+	
+	UFUNCTION(BlueprintCallable)
+	virtual void ChangeInStamina_Implementation(float NewInStamina) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ChangeInHealth_Implementation(float Change) override;

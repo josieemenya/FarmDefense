@@ -78,6 +78,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADirectionalLight* SunLight;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AActor* TooMuchWork;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> CmonMan;
+
 	AActor* OverlappingActor;
 
 	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}

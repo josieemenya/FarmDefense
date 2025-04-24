@@ -131,6 +131,11 @@ int32 AFarmDefenseCharacter::GetTotalDays_Implementation()
 	}
 }*/
 
+void AFarmDefenseCharacter::ChangeInStamina_Implementation(float Cost)
+{
+	this->PlayerStatsInfo.Stamina += Cost;
+}
+
 void AFarmDefenseCharacter::TheNextDay_Implementation()
 {
 	++this->PlayerStatsInfo.TotalDays;

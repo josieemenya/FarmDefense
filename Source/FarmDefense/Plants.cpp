@@ -49,10 +49,18 @@ void APlants::WaterPlant_Implementation()
 void APlants::Action_Implementation()
 {
 	(PlantInfo.hasBeenWatered) ? --PlantInfo.DaysToGrow : PlantInfo.DaysToGrow;
-	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
-	if (GetOverlappingActor() != nullptr && GetOverlappingActor()->Implements<UStatsInterface>())
+	if ((GetOverlappingActor() == nullptr))
 	{
-		IStatsInterface::Execute_TakeStamina(GetOverlappingActor(), -1 * StaminaCost);
+		TooMuchWork = CmonMan->GetDefaultObject<AActor>();
+		SetOverlappingActor(TooMuchWork);
+	}
+	
+	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
+	if ( GetOverlappingActor() && GetOverlappingActor() != this && GetOverlappingActor()->GetClass()->ImplementsInterface(UStatsInterface::StaticClass()))
+	{
+		IStatsInterface::Execute_ChangeInStamina(GetOverlappingActor(), (-1 * StaminaCost));
+		GEngine->AddOnScreenDebugMessage(32, 20.f, FColor::MakeRandomColor(), TEXT("boooooooooo"));
+	} else {
 		GEngine->AddOnScreenDebugMessage(32, 20.f, FColor::MakeRandomColor(), TEXT("nbjwWaterPlant_Implementation"));
 	}
 }
