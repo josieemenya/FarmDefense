@@ -68,6 +68,12 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	
 }
 
+void AFarmDefenseCharacter::ChangeInStamina(float Cost)
+{
+	this->PlayerStatsInfo.Stamina -= Cost; 
+}
+
+
 void AFarmDefenseCharacter::BeginPlay()
 {
 	// Call the base class  
@@ -80,6 +86,8 @@ void AFarmDefenseCharacter::BeginPlay()
 	}
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
 	PlayerStatsInfo = FPlayerInfo(100, 100, 100, 100, 100, 0);
+	//FTimerHandle TimerHandle;
+	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AFarmDefenseCharacter::GetStamina_Implementation, 2.f, true);
 }
 
 void AFarmDefenseCharacter::PossessedBy(AController* NewController)
