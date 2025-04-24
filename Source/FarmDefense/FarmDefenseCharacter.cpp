@@ -13,6 +13,7 @@
 #include "InputActionValue.h"
 #include "Animation/AnimSequence.h"
 #include "GameFramework/SpectatorPawn.h"
+#include "PlantInterface.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
@@ -255,6 +256,8 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 			{
 				Mesh->PlayAnimation(WaterPlant, false); 
 				IInteractInterface::Execute_Action(GetOverlappingActor());
+				if (GetOverlappingActor()->Implements<UPlantInterface>())
+					IPlantInterface::Execute_WaterPlant(GetOverlappingActor());
 			} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
 		} else
 		{

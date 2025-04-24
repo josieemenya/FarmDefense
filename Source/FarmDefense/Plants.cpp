@@ -10,23 +10,48 @@
 #include "Engine/World.h"
 #include "EngineUtils.h"
 #include "TimerManager.h"
+#include "Components/BoxComponent.h"
+#include "StatsInterface.h"
 #include "Kismet/GameplayStatics.h"
 // Sets default values
 APlants::APlants()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	MaxPlantHealth = 100;
-	PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
-	PlantBody->SetupAttachment(GetRootComponent());
-	
+	PlantInfo.MaxPlantHealth = 100;
+	PlantInfo.PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
+	PlantInfo.PlantBody->SetupAttachment(GetRootComponent());
+	OverlappingActor = nullptr;
+	BoxOverlap = CreateDefaultSubobject<UBoxComponent>("BoxOverlap");
+	BoxOverlap->SetupAttachment(RootComponent);
+	StaminaCost = -12; 
+	//BoxOverlap->size
 
 }
 
 
+void APlants::ChangeInHealth_Implementation(float Change)
+{
+	this->PlantInfo.MaxPlantHealth += Change;
+}
+
+void APlants::GetDaysLeft_Implementation()
+{
+	DaysLeft = (FText::AsNumber(this->PlantInfo.DaysToGrow));
+}
+
+void APlants::WaterPlant_Implementation()
+{
+	this->PlantInfo.hasBeenWatered = true;
+	if (this->PlantInfo.hasBeenWatered && OverlappingActor != nullptr && OverlappingActor->Implements<UStatsInterface>())
+	{
+		IStatsInterface::Execute_TakeStamina(GetOverlappingActor(), -1 * StaminaCost);
+	}
+}
+
 void APlants::Action_Implementation()
 {
-	(hasBeenWatered) ? --DaysToGrow : DaysToGrow;
+	(PlantInfo.hasBeenWatered) ? --PlantInfo.DaysToGrow : PlantInfo.DaysToGrow;
 	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
 }
 
@@ -37,19 +62,50 @@ void APlants::EndPlay(const EEndPlayReason::Type EndPlayReason)
 }
 
 
+void APlants::OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor == this)
+		return;
+	
+	if (OtherActor)
+	{
+		SetOverlappingActor(OtherActor);
+	}
+}
+
+void APlants::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
+{
+	if (OtherActor == this)
+		return;
+	if (OtherActor)
+	{
+		SetOverlappingActor(nullptr);
+	}
+}
 
 // Called when the game starts or when spawned
 void APlants::BeginPlay()
 {
 	Super::BeginPlay();
-	PlantHealth = MaxPlantHealth;
+	PlantInfo.PlantHealth = PlantInfo.MaxPlantHealth;
 	LightColour = FColor(38, 58, 150);
 	GEngine->AddOnScreenDebugMessage(10, 10.f, LightColour, TEXT("Testing Light Colour"));
 	FTimerHandle TimerHandle;
 	FTimerHandle TimerHandle2;
+	FTimerHandle TimerHandle3;
 	
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 1.f, true);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 30.f, true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 45.f, true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle3, this, &APlants::GetDaysLeft_Implementation, 45.f, true);
+	
+	if (BoxOverlap)
+	{
+		BoxOverlap->OnComponentBeginOverlap.AddDynamic(this, &APlants::OnOverlap);
+		BoxOverlap->OnComponentBeginOverlap.AddDynamic(this, &APlants::OnOverlap);
+	}
+	
 	for (TActorIterator<ADirectionalLight> DirectionalLightIter(GetWorld()); DirectionalLightIter; ++DirectionalLightIter)
 	{
 
@@ -94,12 +150,12 @@ void APlants::bIsDaytime()
 
 void APlants::bCanGrow()
 {
-	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && hasBeenWatered)
+	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && PlantInfo.hasBeenWatered)
 	{
-		if (DaysToGrow > 0)
-			--DaysToGrow;
+		if (PlantInfo.DaysToGrow > 0)
+			--PlantInfo.DaysToGrow;
 		else
-			readyforHarvest = true;
+			PlantInfo.readyforHarvest = true;
 		
 	}
 

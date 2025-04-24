@@ -6,18 +6,25 @@
 #include "GameFramework/Actor.h"
 #include "InteractInterface.h"
 #include "InputCoreTypes.h"
+#include "PlantInterface.h"
 #include "Plants.generated.h"
 
 class ADirectionalLight;
 UCLASS()
 
-class FARMDEFENSE_API APlants : public AActor, public IInteractInterface
+class FARMDEFENSE_API APlants : public AActor, public IInteractInterface, public IPlantInterface
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	APlants();
+
+	UPROPERTY(EditAnywhere)
+	float StaminaCost; 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interact)
+	FText DaysLeft; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsDay;
@@ -39,24 +46,23 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float NightManager;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	FPlantInfo PlantInfo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	class UBoxComponent* BoxOverlap; 
+
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ChangeInHealth_Implementation(float Change) override;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void WaterPlant_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	void GetDaysLeft_Implementation() override;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
-	float PlantHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
-	float MaxPlantHealth;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class UStaticMeshComponent* PlantBody;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 DaysToGrow; 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool hasBeenWatered; 
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool readyforHarvest;
 
 	public:
 	
@@ -71,6 +77,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADirectionalLight* SunLight;
+
+	AActor* OverlappingActor;
+
+	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
+	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
 	
 
 	public:
@@ -90,7 +101,9 @@ public:
 
 	
 protected:
-	
+
+	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
 	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

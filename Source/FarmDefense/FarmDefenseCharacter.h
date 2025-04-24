@@ -157,6 +157,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	UUserWidget* TheHUD;
+
+	
 	
 public:
 	/** Returns CameraBoom subobject **/
