@@ -20,7 +20,7 @@ public:
 	// Sets default values for this actor's properties
 	APlants();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StaminaCost; 
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interact)
@@ -28,6 +28,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsDay;
+
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void UpdateStamina(); 
 
 	UFUNCTION(BlueprintCallable)
 	void bIsDaytime();

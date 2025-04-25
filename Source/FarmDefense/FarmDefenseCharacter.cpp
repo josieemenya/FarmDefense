@@ -65,6 +65,11 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	OverlapSphere->SetupAttachment(RootComponent);
 	OverlapSphere->SetSphereRadius(30.f);
 	ContextMenuWidget = nullptr;
+	this->PlayerStatsInfo = FPlayerInfo(11, 100.f, 32.f, 100.f, 100.f, 0);
+	this->PlayerStatsInfo.Stamina = GetMaxStamina_Implementation();
+	PlayerStatsInfo = FPlayerInfo(21, 100, 43, 100, 100, 0);
+	PlayerStatsInfo.Stamina = GetMaxStamina_Implementation();
+
 	
 }
 
@@ -79,7 +84,7 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
-	PlayerStatsInfo = FPlayerInfo(100, 100, 100, 100, 100, 0);
+	
 }
 
 void AFarmDefenseCharacter::PossessedBy(AController* NewController)
@@ -133,8 +138,19 @@ int32 AFarmDefenseCharacter::GetTotalDays_Implementation()
 
 void AFarmDefenseCharacter::ChangeInStamina_Implementation(float Cost)
 {
-	this->PlayerStatsInfo.Stamina += Cost;
+	PlayerStatsInfo.Stamina += Cost;
+	this->PlayerStatsInfo.Stamina += Cost; 
+	SetPlayerStatsInfo(PlayerStatsInfo);
+	MarkPackageDirty();
+	FString x = FString::FromInt(PlayerStatsInfo.Stamina) + FString::FromInt(this->PlayerStatsInfo.Stamina);
+	GEngine->AddOnScreenDebugMessage(45, 20.f, FColor::MakeRandomColor(), x);
 }
+
+void AFarmDefenseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	PlayerStatsInfo = FPlayerInfo(100.f, 100.f, 32.f, 100.f, 100.f, 0);
+} 
 
 void AFarmDefenseCharacter::TheNextDay_Implementation()
 {
@@ -153,7 +169,7 @@ float AFarmDefenseCharacter::GetMaxHealth_Implementation()
 
 float AFarmDefenseCharacter::GetStamina_Implementation()
 {
-	return this->PlayerStatsInfo.Stamina;
+	return GetPlayerStatsInfo().Stamina;
 }
 
 float AFarmDefenseCharacter::GetMaxStamina_Implementation()
@@ -334,4 +350,27 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (OtherActor == this)
 		return;
 	if (ActorRef) { SetOverlappingActor(nullptr); UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
+}
+
+void AFarmDefenseCharacter::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+}
+
+void AFarmDefenseCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
+{
+    Super::PostEditChangeProperty(PropertyChangedEvent);
+
+    if (PropertyChangedEvent.Property != nullptr)
+    {
+
+        FName PropertyName = PropertyChangedEvent.Property->GetFName();
+
+        if (PropertyName == GET_MEMBER_NAME_CHECKED(AFarmDefenseCharacter, PlayerStatsInfo))
+        {
+           SetPlayerStatsInfo(PlayerStatsInfo);
+           UE_LOG(LogTemp, Warning, TEXT("YourProperty has been changed!"));
+        }
+    }
 }

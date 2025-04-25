@@ -62,8 +62,24 @@ class AFarmDefenseCharacter : public ACharacter, public SimpleMacros, public ISt
 public:
 	AFarmDefenseCharacter();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Player)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FPlayerInfo PlayerStatsInfo; 
+
+
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE float GetStaminaP() { return this->PlayerStatsInfo.Stamina; };
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE float GetHealthP() { return this->PlayerStatsInfo.Health; }
+
+	UFUNCTION(BlueprintPure)
+	FPlayerInfo GetPlayerStatsInfo() { return PlayerStatsInfo; };
+
+	UFUNCTION(BlueprintCallable)
+	void SetPlayerStatsInfo(FPlayerInfo PlayerStats) { PlayerStatsInfo = PlayerStats; };
+
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class USphereComponent* OverlapSphere;
@@ -84,7 +100,7 @@ protected:
 	void OpenContextMenu(const FInputActionValue& Value);
 	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "FarmDefense")
 	int32 Actions;
 
 	UFUNCTION()
@@ -99,12 +115,15 @@ protected:
 	
 	// To add mapping context
 	virtual void BeginPlay();
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 
 	AActor* OverlappingActor {nullptr};
 
+	
 public:
 	// interface methods, maybe i should done differently, is getting kind of tedious
 	UFUNCTION(BlueprintPure)
@@ -135,7 +154,7 @@ public:
 	virtual float GetMaxStamina_Implementation() override;
 	
 	UFUNCTION(BlueprintCallable)
-	virtual void ChangeInStamina_Implementation(float NewInStamina) override;
+	virtual void ChangeInStamina_Implementation(float Cost) override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ChangeInHealth_Implementation(float Change) override;
@@ -172,10 +191,13 @@ public:
 
 	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
 	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
-	
+
+	virtual void Tick(float DeltaTime) override;
 	
 	
 };
+
+
 
 
 

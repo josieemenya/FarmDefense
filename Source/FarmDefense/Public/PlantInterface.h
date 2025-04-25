@@ -70,5 +70,7 @@ public:
 
 	UFUNCTION(BlueprintNativeEvent)
 	void ChangeInHealth(float Change);
+
+	
 	
 };
