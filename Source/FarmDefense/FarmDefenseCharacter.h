@@ -163,7 +163,12 @@ public:
 	virtual void HealHealth_Implementation(float HealPoint) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void TakeHealth_Implementation(float DamagePoint) override; 
+	virtual void TakeHealth_Implementation(float DamagePoint) override;
+
+	float time = 0; 
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Sounds")
+	class USoundBase* WaterSound;
 
 	//UFUNCTION(BlueprintCallable)
 	//void AddToInventory(FPlayerInfo& PlayerStats, AActor* InventoryActor) override;

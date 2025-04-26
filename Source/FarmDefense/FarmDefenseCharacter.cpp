@@ -15,6 +15,7 @@
 #include "GameFramework/SpectatorPawn.h"
 #include "PlantInterface.h"
 #include "Components/SkeletalMeshComponent.h"
+#include "Sound/SoundBase.h"
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
@@ -268,6 +269,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 {
 	Mesh = GetMesh(); 
 	bool Triggered = Value.Get<bool>();
+	time = 0; 
 	if (Controller != nullptr)
 	{
 		if(Triggered && GetOverlappingActor())
@@ -280,6 +282,11 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 				{
 					IPlantInterface::Execute_WaterPlant(GetOverlappingActor());
 					IInteractInterface::Execute_Action(GetOverlappingActor());
+					//UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
+					do
+					{
+						UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
+					} while(time >= 5.f);
 					GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
 				}
 			} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
@@ -354,6 +361,7 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 void AFarmDefenseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	time += (1 * DeltaTime);
 
 }
 
