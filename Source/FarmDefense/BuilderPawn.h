@@ -64,6 +64,12 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> BuildActorClass;
+	
+	UFUNCTION(BlueprintCallable)
+	void Buildable(bool bCanBuild, FTransform SpawnTransform);
+
 	UFUNCTION(BlueprintCallable)
 	void Build(const FInputActionValue& Value);
 

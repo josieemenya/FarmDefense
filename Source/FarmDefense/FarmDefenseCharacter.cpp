@@ -139,7 +139,6 @@ int32 AFarmDefenseCharacter::GetTotalDays_Implementation()
 void AFarmDefenseCharacter::ChangeInStamina_Implementation(float Cost)
 {
 	PlayerStatsInfo.Stamina += Cost;
-	this->PlayerStatsInfo.Stamina += Cost; 
 	SetPlayerStatsInfo(PlayerStatsInfo);
 	MarkPackageDirty();
 	FString x = FString::FromInt(PlayerStatsInfo.Stamina) + FString::FromInt(this->PlayerStatsInfo.Stamina);

@@ -79,6 +79,18 @@ ABuilderPawn::ABuilderPawn()
 	Peabody = Cast<ACharacter>(Character);
 }
 
+void ABuilderPawn::Buildable(bool bCanBuild, FTransform SpawnTransform)
+{
+	if (bCanBuild) // if mode is in build mode && is not overlapping any actors or static meshes
+	{
+		FActorSpawnParameters SpawnParameters;
+		SpawnParameters.Owner = this;
+		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		AActor* BuildActor = nullptr;
+		BuildActor = GetWorld()->SpawnActor<AActor>(BuildActorClass, SpawnTransform, SpawnParameters);
+	}
+}
+
 
 void ABuilderPawn::Build(const FInputActionValue& Value)
 {
