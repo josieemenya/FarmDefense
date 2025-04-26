@@ -282,11 +282,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 				{
 					IPlantInterface::Execute_WaterPlant(GetOverlappingActor());
 					IInteractInterface::Execute_Action(GetOverlappingActor());
-					//UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
-					do
-					{
-						UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
-					} while(time >= 5.f);
+					UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
 					GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
 				}
 			} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
@@ -361,8 +357,6 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 void AFarmDefenseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	time += (1 * DeltaTime);
-
 }
 
 void AFarmDefenseCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
