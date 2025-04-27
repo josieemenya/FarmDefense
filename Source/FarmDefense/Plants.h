@@ -62,7 +62,10 @@ public:
 	class UBoxComponent* BoxOverlap;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
-	int32 howManyTimes; 
+	int32 howManyTimes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	TSubclassOf<AActor> AllEnemies;
 
 	UFUNCTION(BlueprintCallable)
 	static FPlantInfo CreateDefaultPlantInfo();

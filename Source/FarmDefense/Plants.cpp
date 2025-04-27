@@ -67,16 +67,12 @@ void APlants::Action_Implementation()
 			TooMuchWork = CmonMan->GetDefaultObject<AActor>();
 			SetOverlappingActor(TooMuchWork);
 		}// if days to grow == 0 - harvest;
-	} else if (howManyTimes != 1 || howManyTimes == 0)
+	} else if (howManyTimes > 1 || howManyTimes == 0)
 	{
-		char* prefix = "You have already watered ";
-		char* temp = new char [50];
-		for (char c : this->GetName())
-			temp += c;
-		const char* suffix = temp;
-		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), std::strcat(prefix , suffix));
+		FString Message = "You have already watered "+ FString(this->GetName());
+		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), Message);
 	}
-	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
+	//GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
 	UpdateStamina();
 }
 
@@ -124,6 +120,8 @@ void APlants::BeginPlay()
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 45.f, true);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle3, this, &APlants::GetDaysLeft_Implementation, 45.f, true);
+
+	
 	
 	if (BoxOverlap)
 	{
@@ -175,14 +173,21 @@ void APlants::bIsDaytime()
 
 void APlants::bCanGrow()
 {
+	TArray<AActor*> EnemyActos;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AllEnemies, EnemyActos);
 	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && PlantInfo.hasBeenWatered)
 	{
 		if (PlantInfo.DaysToGrow > 0)
-			--PlantInfo.DaysToGrow;
+			if (EnemyActos.IsEmpty())
+			{
+				--PlantInfo.DaysToGrow;
+				SunLight->SetBrightness(10.f);
+				SunLight->SetLightColor(FColor(1.0, 1.0, 1.0));
+			}
 		else
 			PlantInfo.readyforHarvest = true;
 		PlantInfo.hasBeenWatered = false;
 	}
-
+	howManyTimes = 0; 
 }
 
