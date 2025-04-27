@@ -66,6 +66,7 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	OverlapSphere->SetupAttachment(RootComponent);
 	OverlapSphere->SetSphereRadius(30.f);
 	ContextMenuWidget = nullptr;
+	
 	this->PlayerStatsInfo = FPlayerInfo(11, 100.f, 32.f, 100.f, 100.f, 0);
 	this->PlayerStatsInfo.Stamina = GetMaxStamina_Implementation();
 	PlayerStatsInfo = FPlayerInfo(21, 100, 43, 100, 100, 0);
@@ -308,15 +309,16 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 		ContextMenuWidget->AddToViewport();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true);
-		//DisableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.f);
 		
 	} else
 	{
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
 		ContextMenuWidget->RemoveFromViewport();
 		ContextMenuWidget->Destruct();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("Killed That Bitch Local Menu"));
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
-		//EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+		UGameplayStatics::SetGamePaused(GetWorld(), false);
 	}
 	
 }

@@ -118,7 +118,7 @@ void APlants::BeginPlay()
 	FTimerHandle TimerHandle3;
 	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 45.f, true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 5.f, true);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle3, this, &APlants::GetDaysLeft_Implementation, 45.f, true);
 
 	
@@ -177,17 +177,21 @@ void APlants::bCanGrow()
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AllEnemies, EnemyActos);
 	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && PlantInfo.hasBeenWatered)
 	{
+		howManyTimes = 0; 
 		if (PlantInfo.DaysToGrow > 0)
+		{
 			if (EnemyActos.IsEmpty())
 			{
 				--PlantInfo.DaysToGrow;
 				SunLight->SetBrightness(10.f);
 				SunLight->SetLightColor(FColor(1.0, 1.0, 1.0));
+				PlantInfo.hasBeenWatered = false;
 			}
+		}	
 		else
 			PlantInfo.readyforHarvest = true;
-		PlantInfo.hasBeenWatered = false;
+		
 	}
-	howManyTimes = 0; 
+	
 }
 
