@@ -60,6 +60,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	class UBoxComponent* BoxOverlap;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	int32 howManyTimes; 
 
 	UFUNCTION(BlueprintCallable)
 	static FPlantInfo CreateDefaultPlantInfo();
@@ -78,6 +81,7 @@ public:
 	void GetDaysLeft_Implementation() override;
 	
 
+	
 	public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)

@@ -59,6 +59,7 @@ class AFarmDefenseCharacter : public ACharacter, public SimpleMacros, public ISt
 	UInputAction* OpenContextMenuAction;
 
 
+
 public:
 	AFarmDefenseCharacter();
 

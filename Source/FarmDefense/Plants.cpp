@@ -24,7 +24,8 @@ APlants::APlants()
 	OverlappingActor = nullptr;
 	BoxOverlap = CreateDefaultSubobject<UBoxComponent>("BoxOverlap");
 	BoxOverlap->SetupAttachment(RootComponent);
-	StaminaCost = -12; 
+	StaminaCost = -12;
+	howManyTimes = 0;
 	//BoxOverlap->size
 
 }
@@ -52,19 +53,29 @@ void APlants::GetDaysLeft_Implementation()
 
 void APlants::WaterPlant_Implementation()
 {
+	++howManyTimes;
 	this->PlantInfo.hasBeenWatered = true;
-	
 }
 
 void APlants::Action_Implementation()
 {
-	(PlantInfo.hasBeenWatered) ? --PlantInfo.DaysToGrow : PlantInfo.DaysToGrow;
-	if ((GetOverlappingActor() == nullptr))
+	if (PlantInfo.hasBeenWatered && howManyTimes == 1 && PlantInfo.DaysToGrow > 0)
 	{
-		TooMuchWork = CmonMan->GetDefaultObject<AActor>();
-		SetOverlappingActor(TooMuchWork);
+		--PlantInfo.DaysToGrow;
+		if ((GetOverlappingActor() == nullptr))
+		{
+			TooMuchWork = CmonMan->GetDefaultObject<AActor>();
+			SetOverlappingActor(TooMuchWork);
+		}// if days to grow == 0 - harvest;
+	} else if (howManyTimes != 1 || howManyTimes == 0)
+	{
+		char* prefix = "You have already watered ";
+		char* temp = new char [50];
+		for (char c : this->GetName())
+			temp += c;
+		const char* suffix = temp;
+		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), std::strcat(prefix , suffix));
 	}
-	
 	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
 	UpdateStamina();
 }
@@ -170,7 +181,7 @@ void APlants::bCanGrow()
 			--PlantInfo.DaysToGrow;
 		else
 			PlantInfo.readyforHarvest = true;
-		
+		PlantInfo.hasBeenWatered = false;
 	}
 
 }

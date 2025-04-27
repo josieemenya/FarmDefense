@@ -142,8 +142,8 @@ void AFarmDefenseCharacter::ChangeInStamina_Implementation(float Cost)
 	PlayerStatsInfo.Stamina += Cost;
 	SetPlayerStatsInfo(PlayerStatsInfo);
 	MarkPackageDirty();
-	FString x = FString::FromInt(PlayerStatsInfo.Stamina) + FString::FromInt(this->PlayerStatsInfo.Stamina);
-	GEngine->AddOnScreenDebugMessage(45, 20.f, FColor::MakeRandomColor(), x);
+	//FString x = FString::FromInt(PlayerStatsInfo.Stamina) + FString::FromInt(this->PlayerStatsInfo.Stamina);
+	//GEngine->AddOnScreenDebugMessage(45, 20.f, FColor::MakeRandomColor(), x);
 }
 
 void AFarmDefenseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -260,7 +260,7 @@ void AFarmDefenseCharacter::Look(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
+		AddControllerYawInput(LookAxisVector.X); 
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
@@ -283,13 +283,13 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 					IPlantInterface::Execute_WaterPlant(GetOverlappingActor());
 					IInteractInterface::Execute_Action(GetOverlappingActor());
 					UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
-					GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
+					//GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
 				}
-			} else GEngine->AddOnScreenDebugMessage(4, 10.f, FColor::MakeRandomColor(), TEXT("NotInteractable")); 
+			} else return; // change to widget... maybe
 		} else
 		{
 			
-			GEngine->AddOnScreenDebugMessage(5, 2.f, FColor::MakeRandomColor(), TEXT("bbb")); 
+			return;  
 		}
 	}
 }
