@@ -16,10 +16,14 @@ class FARMDEFENSE_API APlants : public AActor, public IInteractInterface, public
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+
+
+	
 	// Sets default values for this actor's properties
 	APlants();
 
+	//APlants(const FObjectInitializer& ObjectInitializer, FPlantInfo);
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StaminaCost; 
 	
@@ -51,11 +55,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float NightManager;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	FPlantInfo PlantInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
-	class UBoxComponent* BoxOverlap; 
+	class UBoxComponent* BoxOverlap;
+
+	UFUNCTION(BlueprintCallable)
+	static FPlantInfo CreateDefaultPlantInfo();
+
+	UFUNCTION(BlueprintPure)
+	static FPlantInfo CreateSpecialPlanInfo(FName PlantName);
 
 
 	UFUNCTION(BlueprintCallable)

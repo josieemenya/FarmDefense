@@ -18,7 +18,7 @@ APlants::APlants()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	PlantInfo.MaxPlantHealth = 100;
+	PlantInfo = CreateDefaultPlantInfo();
 	PlantInfo.PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
 	PlantInfo.PlantBody->SetupAttachment(GetRootComponent());
 	OverlappingActor = nullptr;
@@ -29,6 +29,16 @@ APlants::APlants()
 
 }
 
+
+FPlantInfo APlants::CreateDefaultPlantInfo()
+{
+	return FPlantInfo();
+}
+
+FPlantInfo APlants::CreateSpecialPlanInfo(FName PlantName)
+{
+	return FPlantInfo(PlantName);
+}
 
 void APlants::ChangeInHealth_Implementation(float Change)
 {

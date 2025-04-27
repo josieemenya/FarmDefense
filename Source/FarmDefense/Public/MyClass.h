@@ -13,5 +13,13 @@ UCLASS()
 class FARMDEFENSE_API UMyClass : public UUserDefinedStruct
 {
 	GENERATED_BODY()
+
+	UMyClass() = default;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	int32 BUF_StructuredBuffe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	float BUF_StructuredValue;
 	
 };

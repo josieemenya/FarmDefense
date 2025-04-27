@@ -17,6 +17,9 @@ USTRUCT(BlueprintType)
 struct FPlantInfo {
 	
 	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName PlantName;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float PlantHealth;
@@ -28,7 +31,7 @@ struct FPlantInfo {
 	class UStaticMeshComponent* PlantBody;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 DaysToGrow; 
+	int32 DaysToGrow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool hasBeenWatered; 
@@ -38,7 +41,7 @@ struct FPlantInfo {
 
 	FPlantInfo() = default;
 
-	FPlantInfo(float plantHealth, float MaxPHealth, UStaticMeshComponent* Body, int32 daysToGrowm, bool Watered, bool Harvest) : PlantHealth(plantHealth), MaxPlantHealth(MaxPHealth), PlantBody(Body), DaysToGrow(daysToGrowm), hasBeenWatered(Watered), readyforHarvest(Harvest) {};
+	FPlantInfo(FName PName, float plantHealth = 100.f, float MaxPHealth = 100.f, UStaticMeshComponent* Body = nullptr, int32 daysToGrowm = 3,  bool Watered = false, bool Harvest = false) : PlantName(PName), PlantHealth(plantHealth), MaxPlantHealth(MaxPHealth), PlantBody(Body), DaysToGrow(daysToGrowm), hasBeenWatered(Watered), readyforHarvest(Harvest) {};
 };
 
 /**
