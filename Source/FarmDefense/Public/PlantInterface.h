@@ -34,6 +34,15 @@ struct FPlantInfo {
 	int32 DaysToGrow;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UTexture2D* Thumbnail = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class UStaticMeshComponent* CurrentGrowthStage; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<UStaticMesh*> GrowthStages;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool hasBeenWatered; 
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -41,7 +50,7 @@ struct FPlantInfo {
 
 	FPlantInfo() = default;
 
-	FPlantInfo(FName PName, float plantHealth = 100.f, float MaxPHealth = 100.f, UStaticMeshComponent* Body = nullptr, int32 daysToGrowm = 3,  bool Watered = false, bool Harvest = false) : PlantName(PName), PlantHealth(plantHealth), MaxPlantHealth(MaxPHealth), PlantBody(Body), DaysToGrow(daysToGrowm), hasBeenWatered(Watered), readyforHarvest(Harvest) {};
+	FPlantInfo(FName PName, float plantHealth = 100.f, float MaxPHealth = 100.f, UStaticMeshComponent* Body = nullptr, int32 daysToGrowm = 3,  UTexture2D* thumbnail = nullptr, bool Watered = false, bool Harvest = false) : PlantName(PName), PlantHealth(plantHealth), MaxPlantHealth(MaxPHealth), PlantBody(Body), DaysToGrow(daysToGrowm), Thumbnail(thumbnail), hasBeenWatered(Watered), readyforHarvest(Harvest) {};
 };
 
 /**
