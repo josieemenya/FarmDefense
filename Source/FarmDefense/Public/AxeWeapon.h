@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "AxeWeapon.generated.h"
 
+class UStaticMeshComponent;
+
 UCLASS()
 class FARMDEFENSE_API AAxeWeapon : public AActor
 {
@@ -23,4 +25,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	UStaticMeshComponent* Axe;
 };
