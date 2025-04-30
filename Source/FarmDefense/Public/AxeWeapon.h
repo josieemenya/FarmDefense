@@ -20,12 +20,25 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	 
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	virtual void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OTherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+	virtual void OnEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	UStaticMeshComponent* Axe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	AActor* OverlappedActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	class UCapsuleComponent* TriggerCapsule;
 };
