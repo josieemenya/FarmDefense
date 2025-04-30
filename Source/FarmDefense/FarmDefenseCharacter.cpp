@@ -18,9 +18,7 @@
 #include "Sound/SoundBase.h"
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
-#include "Interfaces/IPluginManager.h"
 #include "Kismet/GameplayStatics.h"
-#include "Runtime/Slate/Private/Framework/Docking/SDockingTabStack.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -356,26 +354,6 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (OtherActor == this)
 		return;
 	if (ActorRef) { SetOverlappingActor(nullptr); UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
-}
-
-/*void AFarmDefenseCharacter::AddToInventory()
-{
-	if (Inventory.Num() > 99 && OverlappingActor->Implements<UPlantInterface>())
-	{
-		
-		FInventoryItem TempInventoryItem;
-		TempInventoryItem.Name = "Default";
-		//TempInventoryItem.Icon = IPlantInterface::Thumbnail;
-		TempInventoryItem.Description = "It's a crop";
-		TempInventoryItem.Quantity = 1;
-		if (Inventory.Find(TempInventoryItem))
-		{
-			int32 x = Inventory.Find(TempInventoryItem);
-			++Inventory[x].Quantity;
-		}
-		else
-			Inventory.Add(TempInventoryItem);
-	}*/
 }
 
 void AFarmDefenseCharacter::Tick(float DeltaTime)
