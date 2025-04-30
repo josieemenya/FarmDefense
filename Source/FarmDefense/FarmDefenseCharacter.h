@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "InteractInterface.h"
+#include "PlayerInventory.h"
 #include "StatsInterface.h"
 #include "Logging/LogMacros.h"
 #include "Kismet/KismetMathLibrary.h"
@@ -187,7 +188,13 @@ public:
 	UUserWidget* TheHUD;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	bool bBeginAnim; 
+	bool bBeginAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	TArray<FInventoryItem> Inventory;
+
+	//UFUNCTION(BlueprintCallable)
+	//void AddToInventory();
 	
 public:
 	/** Returns CameraBoom subobject **/
