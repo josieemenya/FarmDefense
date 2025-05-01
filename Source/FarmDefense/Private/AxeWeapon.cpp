@@ -5,6 +5,7 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AAxeWeapon::AAxeWeapon()
@@ -23,7 +24,7 @@ AAxeWeapon::AAxeWeapon()
 void AAxeWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	DrawDebugSphere(GetWorld(), GetActorLocation(), 10.0f, 30, FColor::Red);
 }
 
 // Called every frame
