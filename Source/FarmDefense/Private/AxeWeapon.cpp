@@ -24,7 +24,8 @@ AAxeWeapon::AAxeWeapon()
 void AAxeWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	DrawDebugSphere(GetWorld(), GetActorLocation(), 10.0f, 30, FColor::Red);
+	BaseZ = GetActorLocation().Z;
+	
 }
 
 // Called every frame
@@ -33,7 +34,7 @@ void AAxeWeapon::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	FVector CurrentLocation = GetActorLocation();
-	CurrentLocation.Z += FMath::Sin(DeltaTime * 2 * 100.f); 
+	CurrentLocation.Z =  BaseZ + FMath::Sin(DeltaTime * 2 * 1000.f); 
 
 	SetActorLocation(CurrentLocation);
 	
