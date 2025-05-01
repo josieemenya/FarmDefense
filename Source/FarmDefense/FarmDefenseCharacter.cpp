@@ -12,7 +12,7 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "InputActionValue.h"
 #include "Animation/AnimSequence.h"
-#include "GameFramework/SpectatorPawn.h"
+#include "EnemyInterface.h"
 #include "PlantInterface.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Sound/SoundBase.h"
@@ -193,6 +193,12 @@ void AFarmDefenseCharacter::TakeHealth_Implementation(float DamagePoint)
 	this->PlayerStatsInfo.Health += DamagePoint;
 }
 
+void AFarmDefenseCharacter::Attack()
+{
+	GEngine->AddOnScreenDebugMessage(1234, 3.f, FColor::MakeRandomColor(), TEXT("Burger"));
+
+}
+
 //////////////////////////////////////////////////////////////////////////
 // Input
 
@@ -287,10 +293,9 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 					//GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
 				}
 			} else return; // change to widget... maybe
-		} else
+		} else if (Triggered && !GetOverlappingActor() || Triggered && GetOverlappingActor()->Implements<UEnemyInterface>())
 		{
-			
-			return;  
+			Attack(); 
 		}
 	}
 }

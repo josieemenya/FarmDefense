@@ -174,6 +174,9 @@ public:
 	//UFUNCTION(BlueprintCallable)
 	//void AddToInventory(FPlayerInfo& PlayerStats, AActor* InventoryActor) override;
 
+	UFUNCTION(BlueprintCallable)
+	void Attack(); 
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FarmDefense")
 	TSubclassOf<UUserWidget> ContextMenuWidgetClass;
 

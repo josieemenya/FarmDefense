@@ -17,10 +17,13 @@ struct FEnemyStats
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	double MaxHealth;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Defense; 
+
 	
 
 	FEnemyStats() = default;
-	FEnemyStats(double x, double y) : Health(x), MaxHealth(y) {};
+	FEnemyStats(double x, double y = 100.f, int32 z = 10) : Health(x), MaxHealth(y), Defense(z) {};
 
 	
 };
