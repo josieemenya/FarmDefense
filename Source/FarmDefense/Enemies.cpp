@@ -37,3 +37,16 @@ void AEnemies::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 }
 
+void AEnemies::TakeDamage_Implementation(float ATK)
+{
+	float DamagePoint = ATK * (1.5 - enemy_stats.Defense);
+	if (enemy_stats.Health > DamagePoint)
+	{
+		enemy_stats.Health += DamagePoint;
+		if (enemy_stats.Health <= 0)
+			Destroy();
+	}
+	else
+		Destroy();
+}
+

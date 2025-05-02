@@ -26,21 +26,14 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon Apperance")
-	class USphereComponent* SphereComp;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class ACharacter> Player;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FWeaponStructure AxeStructure; 
 	
-	UFUNCTION(BlueprintCallable)
-	void DrawALine_Implementation() override;
-
-	UFUNCTION(BlueprintCallable)
-	bool isHittingEnemy_Implementation(bool x) override;
-
+	UFUNCTION(BlueprintPure)
+	float GetWeaponDamage_Implementation() override;
 	
 
 };

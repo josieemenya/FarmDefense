@@ -16,8 +16,10 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "InputActionValue.h"
 #include "Animation/AnimSequence.h"
+#include "Animation/AnimInstance.h"
 #include "EnemyInterface.h"
 #include "PlantInterface.h"
+#include "WeaponInterface.h"
 #include "Components/SkeletalMeshComponent.h"
 #include "Sound/SoundBase.h"
 #include "Components/SphereComponent.h"
@@ -94,15 +96,37 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
-	isAxeEquipped = EAxeEquippedState::AxeEquipped;
+	isAxeEquipped = EAxeEquippedState::AxeUnequipped;
 
 	//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 
 	FTimerHandle TimerHandle;
 	enlarge = false;
+	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	AxeTarget = GetWorld()->SpawnActor<AActor>(Axe, this->GetActorLocation(), this->GetActorRotation(), SpawnParams);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AFarmDefenseCharacter::EquipAxe, 2.0f, true);
 	
-	
+
+
 }
+
+void AFarmDefenseCharacter::EquipAxe()
+{
+	if (isAxeEquipped != EAxeEquippedState::AxeEquipped && SkeletalMesh && SkeletalMesh->DoesSocketExist(FName("hand_lSocket")))
+	{
+		AxeTarget->AttachToComponent(SkeletalMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("hand_lSocket"));
+		AxeTarget->SetActorEnableCollision(false);
+		isAxeEquipped = EAxeEquippedState::AxeEquipped;
+		if (AxeTarget->Implements<UWeaponInterface>())
+		{
+			Damage = IWeaponInterface::Execute_GetWeaponDamage(AxeTarget); 
+		}
+	}
+}
+
 
 void AFarmDefenseCharacter::PossessedBy(AController* NewController)
 {
@@ -123,6 +147,34 @@ void AFarmDefenseCharacter::UnPossessed()
 	TheHUD->Destruct();
 	// replace remove from parent w/ remove from viewport if it doesn't work, 
 }
+
+void AFarmDefenseCharacter::HitDetect()
+{
+	FVector Start, End;
+	if (SkeletalMesh && SkeletalMesh->DoesSocketExist(FName("hand_lSocket")))
+	{
+		
+		Start = SkeletalMesh->GetSocketLocation(FName("hand_lSocket"));
+		End = SkeletalMesh->GetSocketLocation(FName("hand_lSocket"));
+		float Radius = 50.f;
+		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn)); 
+		TArray<AActor*> IgnoredActors;
+		FHitResult Hit;
+		UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, Radius, ObjectTypes, false, IgnoredActors, EDrawDebugTrace::Persistent, Hit, true, FColor::MakeRandomColor());
+		if (Hit.bBlockingHit && Hit.GetActor() && Hit.GetActor() != this)
+		{
+			if (Hit.GetActor()->Implements<UEnemyInterface>())
+			{
+				SetActorScale3D(FVector(5.f, 5.f, 5.f));
+				IEnemyInterface::Execute_TakeDamage(Hit.GetActor(), Damage);
+			}
+		}
+	} else
+	{
+		return; //this->Destroy.AddDynamic(this, &AFarmDefenseCharacter::HitDetect);
+	}
+}
+
 
 float AFarmDefenseCharacter::GetTotalWealth_Implementation()
 {
@@ -213,15 +265,21 @@ void AFarmDefenseCharacter::Attack(const FInputActionValue& Value)
 	bool Pressed = Value.Get<bool>();
 	if (Pressed)
 	{
-		GEngine->AddOnScreenDebugMessage(2003, 10.f, FColor::MakeRandomColor(), TEXT("Ginger")); 
-		if (UAnimInstance* AnimInstance = IsValid(Mesh->GetAnimInstance())? Mesh->GetAnimInstance() : nullptr)
+		
+		if (AnimInstanceR)
 		{
 			SetActorScale3D(FVector(30.f, 30.f, 30.f));
 			if (bAttacking)
 				return; 
 	
 			bAttacking = true;
-			if (AttackMontage && AnimInstance->Montage_IsPlaying(AttackMontage) == false) AnimInstance->Montage_Play(AttackMontage); else SetActorScale3D(FVector(20.f, 20.f, 20.f));
+			if (AttackMontage && AnimInstanceR->Montage_IsPlaying(AttackMontage) == false)
+			{
+				SetActorScale3D(FVector(1.f, 1.f, 1.f));
+				AnimInstanceR->Montage_Play(AttackMontage);
+				bAttacking = false;
+			}
+			else SetActorScale3D(FVector(20.f, 20.f, 20.f));
 		} else
 		{
 			SetActorScale3D(FVector(20.f, 20.f, 20.f));
@@ -260,12 +318,15 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Trigger);
 		EnhancedInputComponent->BindAction(OpenContextMenuAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::OpenContextMenu);
 		EnhancedInputComponent->BindAction(AttackEnemies, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Attack);
+		
+		
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
 
 void AFarmDefenseCharacter::Move(const FInputActionValue& Value)
 {

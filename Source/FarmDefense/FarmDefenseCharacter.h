@@ -67,6 +67,7 @@ class AFarmDefenseCharacter : public ACharacter, public SimpleMacros, public ISt
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* AttackEnemies;
+ 
 
 
 public:
@@ -210,12 +211,30 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	TArray<AActor*> Ignore;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	bool enlarge;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	class UAnimInstance* AnimInstanceR;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	USkeletalMeshComponent* SkeletalMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	TSubclassOf<AActor> Axe;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	float Damage; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	AActor* AxeTarget;
+
+	UFUNCTION(BlueprintCallable)
+	void HitDetect();
+
+	UFUNCTION(BlueprintCallable)
+	void EquipAxe(); 
 
 public:
 	/** Returns CameraBoom subobject **/
@@ -230,6 +249,8 @@ public:
 	
 	
 };
+
+
 
 
 

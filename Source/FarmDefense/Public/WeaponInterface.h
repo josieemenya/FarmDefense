@@ -13,28 +13,11 @@ USTRUCT(BlueprintType)
 struct FWeaponStructure
 {
 	GENERATED_BODY()
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FHitResult LineHit;
+	float WeaponDamage;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Start;
-
-	// alternatively you can get the camera location
-	// FVector Start = FirstPersonCameraComponent->GetComponentLocation();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector ForwardVector; // = FirstPersonCameraComponent->GetForwardVector();
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector End; //((ForwardVector * 1000.f) + Start);
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TEnumAsByte<ECollisionChannel> CollisionChannel;
-
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1, 0, 1);
-	
-	
+	FWeaponStructure() = default;
+	FWeaponStructure(float Damage) : WeaponDamage(Damage) {};
 };
 
 // This class does not need to be modified.
@@ -55,8 +38,8 @@ class FARMDEFENSE_API IWeaponInterface
 public:
 
 	UFUNCTION(BlueprintNativeEvent)
-	void DrawALine(); 
+	float GetWeaponDamage();
+
 	
-	UFUNCTION(BlueprintNativeEvent)
-	bool isHittingEnemy(bool x); 
+	
 };

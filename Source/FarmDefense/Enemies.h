@@ -34,6 +34,9 @@ public:
 	TArray<AActor*> Plants; 
 
 	UFUNCTION(BlueprintPure)
-	float GetHealth() { return enemy_stats.Health; } 
+	float GetHealth() { return enemy_stats.Health; }
+
+	UFUNCTION(BlueprintCallable)
+	void TakeDamage_Implementation(float ATK) override; 
 
 };
