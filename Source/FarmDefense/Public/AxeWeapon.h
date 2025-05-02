@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "WeaponInterface.h"
 #include "AxeWeapon.generated.h"
 
 UCLASS()
-class FARMDEFENSE_API AAxeWeapon : public AActor
+class FARMDEFENSE_API AAxeWeapon : public AActor, public IWeaponInterface
 {
 	GENERATED_BODY()
 	
@@ -28,7 +29,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon Apperance")
 	class USphereComponent* SphereComp;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon Apperance")
-	class UStaticMeshComponent* AxeMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<class ACharacter> Player;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FWeaponStructure AxeStructure; 
+	
+	UFUNCTION(BlueprintCallable)
+	void DrawALine_Implementation() override;
+
+	UFUNCTION(BlueprintCallable)
+	bool isHittingEnemy_Implementation(bool x) override;
+
+	
 
 };
+

@@ -11,6 +11,13 @@
 #include "SimpleMacros.h"
 #include "FarmDefenseCharacter.generated.h"
 
+UENUM(BlueprintType)
+enum class EAxeEquippedState : uint8
+{
+	AxeEquipped,
+	AxeUnequipped
+};
+
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -58,6 +65,8 @@ class AFarmDefenseCharacter : public ACharacter, public SimpleMacros, public ISt
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* OpenContextMenuAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* AttackEnemies;
 
 
 public:
@@ -66,7 +75,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FPlayerInfo PlayerStatsInfo; 
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Animation)
+	class UAnimMontage* AttackMontage;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = Animation)
+	bool bAttacking;
 
 	UFUNCTION(BlueprintPure)
 	FORCEINLINE float GetStaminaP() { return this->PlayerStatsInfo.Stamina; };
@@ -175,7 +188,7 @@ public:
 	//void AddToInventory(FPlayerInfo& PlayerStats, AActor* InventoryActor) override;
 
 	UFUNCTION(BlueprintCallable)
-	void Attack(); 
+	void Attack(const FInputActionValue& Value); 
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FarmDefense")
 	TSubclassOf<UUserWidget> ContextMenuWidgetClass;
@@ -190,8 +203,20 @@ public:
 	UUserWidget* TheHUD;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	bool bBeginAnim; 
+	bool bBeginAnim;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	EAxeEquippedState isAxeEquipped;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	TArray<AActor*> Ignore;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	bool enlarge;
+
 public:
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }

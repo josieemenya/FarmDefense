@@ -1,6 +1,10 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "FarmDefenseCharacter.h"
+
+#include <ThirdParty/ShaderConductor/ShaderConductor/External/DirectXShaderCompiler/include/dxc/DXIL/DxilConstants.h>
+
+#include "AnalyticsEventAttribute.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -72,6 +76,10 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	PlayerStatsInfo = FPlayerInfo(21, 100, 43, 100, 100, 0);
 	PlayerStatsInfo.Stamina = GetMaxStamina_Implementation();
 
+	bAttacking = false;
+
+	
+
 	
 }
 
@@ -86,6 +94,13 @@ void AFarmDefenseCharacter::BeginPlay()
 		OverlapSphere->OnComponentEndOverlap.AddDynamic(this, &AFarmDefenseCharacter::EndOverlap);
 	}
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->bEnableClickEvents = true;
+	isAxeEquipped = EAxeEquippedState::AxeEquipped;
+
+	//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+
+	FTimerHandle TimerHandle;
+	enlarge = false;
+	
 	
 }
 
@@ -193,10 +208,25 @@ void AFarmDefenseCharacter::TakeHealth_Implementation(float DamagePoint)
 	this->PlayerStatsInfo.Health += DamagePoint;
 }
 
-void AFarmDefenseCharacter::Attack()
+void AFarmDefenseCharacter::Attack(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(1234, 3.f, FColor::MakeRandomColor(), TEXT("Burger"));
-
+	bool Pressed = Value.Get<bool>();
+	if (Pressed)
+	{
+		GEngine->AddOnScreenDebugMessage(2003, 10.f, FColor::MakeRandomColor(), TEXT("Ginger")); 
+		if (UAnimInstance* AnimInstance = IsValid(Mesh->GetAnimInstance())? Mesh->GetAnimInstance() : nullptr)
+		{
+			SetActorScale3D(FVector(30.f, 30.f, 30.f));
+			if (bAttacking)
+				return; 
+	
+			bAttacking = true;
+			if (AttackMontage && AnimInstance->Montage_IsPlaying(AttackMontage) == false) AnimInstance->Montage_Play(AttackMontage); else SetActorScale3D(FVector(20.f, 20.f, 20.f));
+		} else
+		{
+			SetActorScale3D(FVector(20.f, 20.f, 20.f));
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -229,6 +259,7 @@ void AFarmDefenseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		EnhancedInputComponent->BindAction(TriggerAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Trigger);
 		EnhancedInputComponent->BindAction(OpenContextMenuAction, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::OpenContextMenu);
+		EnhancedInputComponent->BindAction(AttackEnemies, ETriggerEvent::Triggered, this, &AFarmDefenseCharacter::Attack);
 	}
 	else
 	{
@@ -293,9 +324,6 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 					//GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
 				}
 			} else return; // change to widget... maybe
-		} else if (Triggered && !GetOverlappingActor() || Triggered && GetOverlappingActor()->Implements<UEnemyInterface>())
-		{
-			Attack(); 
 		}
 	}
 }
@@ -361,9 +389,12 @@ void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (ActorRef) { SetOverlappingActor(nullptr); UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
 }
 
+
+
 void AFarmDefenseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//DrawDebugSphere(GetWorld(), GetMesh()->GetSocketLocation("hand_lSocket"), 10.f, 12, FColor::Red, false, 2.f);
 }
 
 void AFarmDefenseCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
