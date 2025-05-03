@@ -27,6 +27,12 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetActorValues(APawn* SensedPawn);
+
+	UFUNCTION(BlueprintCallable)
+	void UnSetActorValues(UActorComponent* Component); 
+	
 	UPROPERTY(EditAnywhere)
 	FEnemyStats enemy_stats;
 
@@ -37,6 +43,18 @@ public:
 	float GetHealth() { return enemy_stats.Health; }
 
 	UFUNCTION(BlueprintCallable)
-	void TakeDamage_Implementation(float ATK) override; 
+	void TakeDamage_Implementation(float ATK) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	class UPawnSensingComponent* PawnSensingComp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	APawn* SensedPawnActor;
+
+	UFUNCTION(BlueprintCallable)
+	void isSensingPawn();
 
 };
+
+
+
