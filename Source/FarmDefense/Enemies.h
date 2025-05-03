@@ -54,6 +54,23 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void isSensingPawn();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	class UAnimInstance* AttackAnimINstance;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	class UAnimMontage* AttackMontage;
+
+	UFUNCTION(BlueprintCallable)
+	void AttackPlayer();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	AActor* PlantsTarget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	float Attack;
+
+	UFUNCTION(BlueprintCallable)
+	void PlayMontage();
 };
 
 

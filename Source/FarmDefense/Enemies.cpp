@@ -2,6 +2,10 @@
 
 
 #include "Enemies.h"
+#include "Animation/AnimMontage.h"
+#include "Animation/AnimInstance.h"
+#include "StatsInterface.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PawnSensingComponent.h"
 
 
@@ -65,6 +69,36 @@ void AEnemies::isSensingPawn()
 	}
 }
 
+void AEnemies::AttackPlayer()
+{
+	FVector Start, End;
+	if (GetMesh() && GetMesh()->DoesSocketExist(FName("AttackCenter")))
+	{
+		Start = GetMesh()->GetSocketLocation(FName("AttackCenter"));
+		End = GetMesh()->GetSocketLocation(FName("AttackCenter"));
+	}
+	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+	TArray<AActor*> IgnoreActors;
+	FHitResult Hit;
+	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+	if (SensedPawnActor || PlantsTarget)
+	{
+		if (SensedPawnActor->Implements<UStatsInterface>())
+		{
+			UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, 100.f, ObjectTypes, false, IgnoreActors, EDrawDebugTrace::ForDuration, Hit, true, FColor::MakeRandomColor());
+		}
+			
+	}
+}
+
+void AEnemies::PlayMontage()
+{
+	if (AttackAnimINstance && AttackMontage)
+		AttackAnimINstance->Montage_Play(AttackMontage);
+}
+
+//IStatsInterface::Execute_TakeHealth(SensedPawnActor, -(Attack));
+
 void AEnemies::TakeDamage_Implementation(float ATK)
 {
 	float DamagePoint = ATK * (1.5 - enemy_stats.Defense);
@@ -78,3 +112,4 @@ void AEnemies::TakeDamage_Implementation(float ATK)
 		Destroy();
 }
 
+	
