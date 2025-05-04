@@ -37,7 +37,10 @@ public:
 	FEnemyStats enemy_stats;
 
 	UPROPERTY(EditAnywhere)
-	TArray<AActor*> Plants; 
+	TArray<AActor*> Plants;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Distance;  
 
 	UFUNCTION(BlueprintPure)
 	float GetHealth() { return enemy_stats.Health; }

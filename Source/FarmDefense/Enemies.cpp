@@ -61,7 +61,7 @@ void AEnemies::isSensingPawn()
 {
 	if (SensedPawnActor)
 	{
-		float Distance = FVector::Dist(GetActorLocation(), SensedPawnActor->GetActorLocation());
+		Distance = FVector::Dist(GetActorLocation(), SensedPawnActor->GetActorLocation());
 		if (Distance >= 500)
 		{
 			SensedPawnActor = nullptr;
@@ -93,7 +93,7 @@ void AEnemies::AttackPlayer()
 
 void AEnemies::PlayMontage()
 {
-	if (AttackAnimINstance && AttackMontage)
+	if (AttackAnimINstance && AttackMontage && AttackAnimINstance->Montage_IsPlaying(AttackMontage) == false)
 		AttackAnimINstance->Montage_Play(AttackMontage);
 }
 
