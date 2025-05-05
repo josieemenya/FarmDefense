@@ -403,11 +403,11 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 		ContextMenuWidget->AddToViewport();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true);
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.f);
+		//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.f);
 		
 	} else
 	{
-		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
+		//UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 1.f);
 		ContextMenuWidget->RemoveFromViewport();
 		ContextMenuWidget->Destruct();
 		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("Killed That Bitch Local Menu"));
