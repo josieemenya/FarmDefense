@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "EnemyInterface.h"
+#include "Templates/Function.h"
 #include "Enemies.generated.h"
 
 UCLASS()
@@ -63,6 +64,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
 	class UAnimMontage* AttackMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ai Comp")
+	class UAnimMontage* DeathMontage;
+
 	UFUNCTION(BlueprintCallable)
 	void AttackPlayer();
 
@@ -74,7 +78,16 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void PlayMontage();
+
+	UFUNCTION(BlueprintCallable)
+	void EnemyDeath();
+
+	bool MontagePlay;
+
+	
+	
 };
+	
 
 
 

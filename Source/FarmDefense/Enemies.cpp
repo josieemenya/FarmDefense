@@ -23,18 +23,27 @@ AEnemies::AEnemies()
 // Called when the game starts or when spawned
 void AEnemies::BeginPlay()
 {
+	
 	Super::BeginPlay();
 	enemy_stats = FEnemyStats(100, 100);
 	PawnSensingComp->OnSeePawn.AddDynamic(this, &AEnemies::SetActorValues);
 	PawnSensingComp->OnComponentDeactivated.AddDynamic(this, &AEnemies::UnSetActorValues);
 	FTimerHandle TimerHandle;
+	FTimerHandle EnemyLifeSupport;
+	FTimerHandle Check;
+	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemies::isSensingPawn, 1.f, true);
+	GetWorld()->GetTimerManager().SetTimer(EnemyLifeSupport, this, &AEnemies::EnemyDeath, 1.f, true);
+	
+	
+
 }
 
 // Called every frame
 void AEnemies::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	--enemy_stats.Health;
 
 }
 
@@ -97,6 +106,15 @@ void AEnemies::PlayMontage()
 		AttackAnimINstance->Montage_Play(AttackMontage);
 }
 
+void AEnemies::EnemyDeath()
+{
+	if (enemy_stats.Health <= 0)
+	{
+		PlayAnimMontage(DeathMontage);
+		MontagePlay = true; 
+	}
+}
+
 //IStatsInterface::Execute_TakeHealth(SensedPawnActor, -(Attack));
 
 void AEnemies::TakeDamage_Implementation(float ATK)
@@ -106,10 +124,15 @@ void AEnemies::TakeDamage_Implementation(float ATK)
 	{
 		enemy_stats.Health += DamagePoint;
 		if (enemy_stats.Health <= 0)
-			Destroy();
+		{
+			EnemyDeath(); 
+		}
 	}
 	else
-		Destroy();
+	{
+		EnemyDeath(); 
+	}
+		
 }
 
 	
