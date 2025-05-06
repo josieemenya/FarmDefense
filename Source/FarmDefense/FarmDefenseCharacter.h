@@ -140,7 +140,7 @@ protected:
 
 	
 public:
-	// interface methods, maybe i should done differently, is getting kind of tedious
+	// interface methods, maybe i should done differently, is getting kind of tedious, anyway returns total wealth yknow
 	UFUNCTION(BlueprintPure)
 	virtual float GetTotalWealth_Implementation() override;
 
@@ -235,6 +235,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EquipAxe(); 
+
+
 
 public:
 	/** Returns CameraBoom subobject **/

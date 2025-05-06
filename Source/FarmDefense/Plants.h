@@ -55,7 +55,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float NightManager;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
 	FPlantInfo PlantInfo;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
@@ -87,10 +87,10 @@ public:
 	
 	public:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float SellPrice;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float MaxSellPrince;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -138,10 +138,18 @@ protected:
 	virtual void NotifyActorOnClicked(FKey ButtonPressed = EKeys::LeftMouseButton) override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	
 	
 	
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	void ChangeBody(float Percentage);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 DayCounter; 
 
 };

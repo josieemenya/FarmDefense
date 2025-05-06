@@ -79,15 +79,18 @@ ABuilderPawn::ABuilderPawn()
 	Peabody = Cast<ACharacter>(Character);
 }
 
-void ABuilderPawn::Buildable(bool bCanBuild, FTransform SpawnTransform)
+void ABuilderPawn::Buildable(bool bCanBuild, FTransform SpawnTransform, TSubclassOf<AActor> SpawnableBuildClass)
 {
 	if (bCanBuild) // if mode is in build mode && is not overlapping any actors or static meshes
 	{
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = this;
 		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		AActor* BuildActor = nullptr;
-		BuildActor = GetWorld()->SpawnActor<AActor>(BuildActorClass, SpawnTransform, SpawnParameters);
+		AActor* BuildActor =  GetWorld()->SpawnActor<AActor>(SpawnableBuildClass, SpawnTransform, SpawnParameters);
+		GEngine->AddOnScreenDebugMessage(101000, 50.f, FColor::Red, "built bby");
+	} else
+	{
+		GEngine->AddOnScreenDebugMessage(101000, 50.f, FColor::Red, "friiiiiick");
 	}
 }
 
@@ -95,9 +98,6 @@ void ABuilderPawn::Buildable(bool bCanBuild, FTransform SpawnTransform)
 void ABuilderPawn::Build(const FInputActionValue& Value)
 {
 	//GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "Build");
-	bool x = Value.Get<bool>();
-	if (x)
-		GEngine->AddOnScreenDebugMessage(1, 5, FColor::Red, "Build");
 }
 
 void ABuilderPawn::Move(const FInputActionValue& Value)

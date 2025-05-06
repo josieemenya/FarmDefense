@@ -71,7 +71,7 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 	TSubclassOf<AActor> BuildActorClass;
 	
 	UFUNCTION(BlueprintCallable)
-	void Buildable(bool bCanBuild, FTransform SpawnTransform);
+	void Buildable(bool bCanBuild, FTransform SpawnTransform, TSubclassOf<AActor> SpawnableBuildClass = nullptr);
 
 	UFUNCTION(BlueprintCallable)
 	void Build(const FInputActionValue& Value);
@@ -81,7 +81,6 @@ class FARMDEFENSE_API ABuilderPawn : public ASpectatorPawn
 
 	UFUNCTION(BlueprintCallable)
 	void Look(const FInputActionValue& Value);
-
 
 	
 };

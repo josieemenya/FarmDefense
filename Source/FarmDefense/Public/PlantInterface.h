@@ -72,9 +72,6 @@ public:
 	void GetDaysLeft();
 
 	UFUNCTION(BlueprintNativeEvent)
-	void ChangeBody();
-
-	UFUNCTION(BlueprintNativeEvent)
 	float GetHealth();
 
 	UFUNCTION(BlueprintNativeEvent)

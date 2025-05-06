@@ -12,7 +12,9 @@
 #include "TimerManager.h"
 #include "Components/BoxComponent.h"
 #include "StatsInterface.h"
+#include "Editor/Documentation/Private/UDNParser.h"
 #include "Kismet/GameplayStatics.h"
+#include "Math/UnitConversion.h"
 // Sets default values
 APlants::APlants()
 {
@@ -27,6 +29,8 @@ APlants::APlants()
 	StaminaCost = -12;
 	howManyTimes = 0;
 	//BoxOverlap->size
+	PlantInfo.GrowthStages.SetNum(3);
+	
 
 }
 
@@ -116,6 +120,7 @@ void APlants::BeginPlay()
 	FTimerHandle TimerHandle;
 	FTimerHandle TimerHandle2;
 	FTimerHandle TimerHandle3;
+	DayCounter = PlantInfo.DaysToGrow; 
 	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 5.f, true);
@@ -171,8 +176,40 @@ void APlants::bIsDaytime()
 	}
 }
 
+void APlants::ChangeBody(float Percentage)
+{
+	// checking if the graowth stages aren't empty
+	if (PlantInfo.GrowthStages.IsEmpty())
+	{
+		return; 
+	}
+
+	// checking if each static mesh is valid
+	for (auto c : PlantInfo.GrowthStages)
+	{
+		if (!IsValid(c))
+		{
+			return; 
+		}
+	}
+
+	// changing plant body based on Percentage
+	if (Percentage > 0.25f)
+	{
+		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[0]);
+	} else if (Percentage > 0.5f)
+	{
+		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[1]);
+	}else
+	{
+		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[2]);
+	}
+}
+
+
 void APlants::bCanGrow()
 {
+	ChangeBody(PlantInfo.DaysToGrow/DayCounter);
 	TArray<AActor*> EnemyActos;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AllEnemies, EnemyActos);
 	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && PlantInfo.hasBeenWatered)
@@ -186,6 +223,7 @@ void APlants::bCanGrow()
 				SunLight->SetBrightness(10.f);
 				SunLight->SetLightColor(FColor(1.0, 1.0, 1.0));
 				PlantInfo.hasBeenWatered = false;
+				
 			}
 		}	
 		else
