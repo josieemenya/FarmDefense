@@ -136,7 +136,7 @@ protected:
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;
 
-	AActor* OverlappingActor {nullptr};
+	TWeakObjectPtr<AActor> OverlappingActor {nullptr};
 
 	
 public:
@@ -244,10 +244,12 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
+	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor.Get();}
 	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
 
 	virtual void Tick(float DeltaTime) override;
+
+	
 	
 	
 };

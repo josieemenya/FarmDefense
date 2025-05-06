@@ -83,6 +83,7 @@ void ABuilderPawn::Buildable(bool bCanBuild, FTransform SpawnTransform, TSubclas
 {
 	if (bCanBuild) // if mode is in build mode && is not overlapping any actors or static meshes
 	{
+		//SpawnTransform.SetLocation(FVector(SpawnTransform.GetLocation().X, SpawnTransform.GetLocation().Y, SpawnTransform.GetLocation().Z + 20));  
 		FActorSpawnParameters SpawnParameters;
 		SpawnParameters.Owner = this;
 		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;

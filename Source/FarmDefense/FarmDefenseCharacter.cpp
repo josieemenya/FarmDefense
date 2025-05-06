@@ -25,6 +25,7 @@
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "UObject/WeakObjectPtr.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -165,7 +166,6 @@ void AFarmDefenseCharacter::HitDetect()
 		{
 			if (Hit.GetActor()->Implements<UEnemyInterface>())
 			{
-				SetActorScale3D(FVector(5.f, 5.f, 5.f));
 				IEnemyInterface::Execute_TakeDamage(Hit.GetActor(), Damage);
 			}
 		}
@@ -218,6 +218,11 @@ void AFarmDefenseCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 	PlayerStatsInfo = FPlayerInfo(100.f, 100.f, 32.f, 100.f, 100.f, 0);
+	if (OverlapSphere)
+	{
+		OverlapSphere->OnComponentBeginOverlap.RemoveDynamic(this, &AFarmDefenseCharacter::OnOverlap);
+		OverlapSphere->OnComponentEndOverlap.RemoveDynamic(this, &AFarmDefenseCharacter::EndOverlap);
+	}
 } 
 
 void AFarmDefenseCharacter::TheNextDay_Implementation()
@@ -268,21 +273,19 @@ void AFarmDefenseCharacter::Attack(const FInputActionValue& Value)
 		
 		if (AnimInstanceR)
 		{
-			SetActorScale3D(FVector(30.f, 30.f, 30.f));
 			if (bAttacking)
 				return; 
 	
 			bAttacking = true;
 			if (AttackMontage && AnimInstanceR->Montage_IsPlaying(AttackMontage) == false)
 			{
-				SetActorScale3D(FVector(1.f, 1.f, 1.f));
 				AnimInstanceR->Montage_Play(AttackMontage);
 				bAttacking = false;
 			}
-			else SetActorScale3D(FVector(20.f, 20.f, 20.f));
+			else return; 
 		} else
 		{
-			SetActorScale3D(FVector(20.f, 20.f, 20.f));
+			return; 
 		}
 	}
 }
@@ -445,10 +448,23 @@ void AFarmDefenseCharacter::OnOverlap(UPrimitiveComponent* OverlappedComponent, 
 void AFarmDefenseCharacter::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 	UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex)
 {
-	AActor* ActorRef = Cast<AActor>(OtherActor);
-	if (OtherActor == this)
+	if (!IsValid(this))
 		return;
-	if (ActorRef) { SetOverlappingActor(nullptr); UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);} else UE_LOG(LogTemp, Warning, TEXT("OverlappingPlant is invalid"));
+	
+	AActor* ActorRef = Cast<AActor>(OtherActor);
+	if (!OtherActor || OtherActor == this)
+		return;
+	
+	SetOverlappingActor(nullptr);
+	
+	if (APlayerController* PC = UGameplayStatics::GetPlayerController(GetWorld(), 0))
+	{
+		PC->SetShowMouseCursor(false);
+	} else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Overlapping actor is no longer valid — was probably destroyed."));
+	}
+
 }
 
 
@@ -471,7 +487,6 @@ void AFarmDefenseCharacter::PostEditChangeProperty(FPropertyChangedEvent& Proper
         if (PropertyName == GET_MEMBER_NAME_CHECKED(AFarmDefenseCharacter, PlayerStatsInfo))
         {
            SetPlayerStatsInfo(PlayerStatsInfo);
-           UE_LOG(LogTemp, Warning, TEXT("YourProperty has been changed!"));
         }
     }
 }

@@ -65,7 +65,6 @@ void APlants::Action_Implementation()
 {
 	if (PlantInfo.hasBeenWatered && howManyTimes == 1 && PlantInfo.DaysToGrow > 0)
 	{
-		--PlantInfo.DaysToGrow;
 		if ((GetOverlappingActor() == nullptr))
 		{
 			TooMuchWork = CmonMan->GetDefaultObject<AActor>();
@@ -120,7 +119,8 @@ void APlants::BeginPlay()
 	FTimerHandle TimerHandle;
 	FTimerHandle TimerHandle2;
 	FTimerHandle TimerHandle3;
-	DayCounter = PlantInfo.DaysToGrow; 
+	DayCounter = PlantInfo.DaysToGrow;
+	SetActorScale3D(FVector(2, 2, 2));
 	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 5.f, true);
@@ -148,6 +148,8 @@ void APlants::BeginPlay()
 			GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::MakeRandomColor(), TEXT("No Sunlight"));
 		}
 	}
+	if (!PlantInfo.GrowthStages.IsEmpty() && PlantInfo.GrowthStages.IsValidIndex(0))
+		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[0]);
 }
 
 
@@ -194,22 +196,24 @@ void APlants::ChangeBody(float Percentage)
 	}
 
 	// changing plant body based on Percentage
-	if (Percentage > 0.25f)
+	if (Percentage < 0.33f)
 	{
-		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[0]);
-	} else if (Percentage > 0.5f)
+		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[2]);
+	} else if (Percentage < 0.66f)
 	{
 		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[1]);
 	}else
 	{
-		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[2]);
+		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[0]);
 	}
+	UE_LOG(LogTemp, Warning, TEXT("Percentage: %f"), Percentage);
+	UE_LOG(LogTemp, Warning, TEXT("DaysLeft : %d"), PlantInfo.DaysToGrow);
 }
 
 
 void APlants::bCanGrow()
 {
-	ChangeBody(PlantInfo.DaysToGrow/DayCounter);
+	ChangeBody(PlantInfo.DaysToGrow/(float)DayCounter);
 	TArray<AActor*> EnemyActos;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AllEnemies, EnemyActos);
 	if (SunLight->GetBrightness() <  0.5f && !bIsDamaged && PlantInfo.hasBeenWatered)
@@ -224,12 +228,13 @@ void APlants::bCanGrow()
 				SunLight->SetLightColor(FColor(1.0, 1.0, 1.0));
 				PlantInfo.hasBeenWatered = false;
 				
+				
 			}
 		}	
 		else
 			PlantInfo.readyforHarvest = true;
 		
 	}
-	
+	UE_LOG(LogTemp, Warning, TEXT("DaysLeft : %d"), PlantInfo.DaysToGrow);
 }
 
