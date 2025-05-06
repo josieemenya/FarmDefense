@@ -67,15 +67,14 @@ void APlants::Action_Implementation()
 	{
 		if ((GetOverlappingActor() == nullptr))
 		{
-			TooMuchWork = CmonMan->GetDefaultObject<AActor>();
-			SetOverlappingActor(TooMuchWork);
+			GetCharacter = UGameplayStatics::GetActorOfClass(GetWorld(), ActorCharacterClass); 
+			SetOverlappingActor(GetCharacter);
 		}// if days to grow == 0 - harvest;
 	} else if (howManyTimes > 1 || howManyTimes == 0)
 	{
 		FString Message = "You have already watered "+ FString(this->GetName());
 		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), Message);
-	}
-	//GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("OverlappingPlant"));
+	} 
 	UpdateStamina();
 }
 
@@ -199,7 +198,7 @@ void APlants::ChangeBody(float Percentage)
 	if (Percentage < 0.33f)
 	{
 		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[2]);
-	} else if (Percentage < 0.66f)
+	} else if (Percentage < 0.67f)
 	{
 		PlantInfo.PlantBody->SetStaticMesh(PlantInfo.GrowthStages[1]);
 	}else
@@ -232,7 +231,7 @@ void APlants::bCanGrow()
 			}
 		}	
 		else
-			PlantInfo.readyforHarvest = true;
+			Harvest(); 
 		
 	}
 	UE_LOG(LogTemp, Warning, TEXT("DaysLeft : %d"), PlantInfo.DaysToGrow);

@@ -382,10 +382,10 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 				
 				if (GetOverlappingActor()->Implements<UPlantInterface>())
 				{
+					UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
 					IPlantInterface::Execute_WaterPlant(GetOverlappingActor());
 					IInteractInterface::Execute_Action(GetOverlappingActor());
-					UGameplayStatics::PlaySoundAtLocation(this, WaterSound, this->GetActorLocation());
-					//GEngine->AddOnScreenDebugMessage(12, 20.f, FColor::Red, TEXT("WaterPlant_Implementation"));
+					
 				}
 			} else return; // change to widget... maybe
 		}

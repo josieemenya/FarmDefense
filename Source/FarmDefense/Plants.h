@@ -73,6 +73,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	static FPlantInfo CreateSpecialPlanInfo(FName PlantName);
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void Harvest();
+
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ChangeInHealth_Implementation(float Change) override;
@@ -100,10 +103,10 @@ public:
 	ADirectionalLight* SunLight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	AActor* TooMuchWork;
+	AActor* GetCharacter;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TSubclassOf<AActor> CmonMan;
+	TSubclassOf<AActor> ActorCharacterClass;
 
 	AActor* OverlappingActor;
 

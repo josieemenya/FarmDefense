@@ -249,8 +249,12 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "FarmDefense")
+	UAnimMontage* AnimationMontage;
+
 	
-	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void WaterPlant(){ PlayAnimMontage(AnimationMontage); }; 
 	
 };
 
