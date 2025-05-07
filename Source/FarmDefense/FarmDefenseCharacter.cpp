@@ -161,7 +161,7 @@ void AFarmDefenseCharacter::HitDetect()
 		ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn)); 
 		TArray<AActor*> IgnoredActors;
 		FHitResult Hit;
-		UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, Radius, ObjectTypes, false, IgnoredActors, EDrawDebugTrace::Persistent, Hit, true, FColor::MakeRandomColor());
+		UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, Radius, ObjectTypes, false, IgnoredActors, EDrawDebugTrace::None, Hit, true, FColor::MakeRandomColor());
 		if (Hit.bBlockingHit && Hit.GetActor() && Hit.GetActor() != this)
 		{
 			if (Hit.GetActor()->Implements<UEnemyInterface>())
