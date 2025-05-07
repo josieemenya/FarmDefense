@@ -378,7 +378,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 		{
 			if(GetOverlappingActor()->Implements<UInteractInterface>())
 			{
-				bBeginAnim = true;
+				bBeginAnim = true; // lesson learned, don't modify values outside where it's declared. 
 				
 				if (GetOverlappingActor()->Implements<UPlantInterface>())
 				{
