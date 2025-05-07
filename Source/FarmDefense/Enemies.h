@@ -79,12 +79,19 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayMontage();
 
-	UFUNCTION(BlueprintCallable)
+	 
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void EnemyDeath();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	bool MontagePlay;
 
-	
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void StartAnim() { MontagePlay = true; }
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void CancelAnim() { MontagePlay = false; }
 	
 };
 	

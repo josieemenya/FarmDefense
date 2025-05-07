@@ -102,7 +102,7 @@ void AFarmDefenseCharacter::BeginPlay()
 	//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 
 	FTimerHandle TimerHandle;
-	enlarge = false;
+	//enlarge = false;
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -277,6 +277,7 @@ void AFarmDefenseCharacter::Attack(const FInputActionValue& Value)
 				return; 
 	
 			bAttacking = true;
+			//StartAttackAnim
 			if (AttackMontage && AnimInstanceR->Montage_IsPlaying(AttackMontage) == false)
 			{
 				AnimInstanceR->Montage_Play(AttackMontage);
@@ -378,7 +379,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 		{
 			if(GetOverlappingActor()->Implements<UInteractInterface>())
 			{
-				bBeginAnim = true; // lesson learned, don't modify values outside where it's declared. 
+				bBeginAnim = true; // lesson learned, don't modify values outside where it's declared. use functions instead. for exa : begin anim, cancel anim.
 				
 				if (GetOverlappingActor()->Implements<UPlantInterface>())
 				{

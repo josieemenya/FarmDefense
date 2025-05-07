@@ -212,8 +212,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
-	bool enlarge;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	class UAnimInstance* AnimInstanceR;
@@ -235,6 +233,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EquipAxe(); 
+
+	/*UFUNCTION(BlueprintPure)
+	FORCEINLINE void StartAttackAnim() {  true; };
+
+	UFUNCTION(BlueprintPure)
+	FORCEINLINE void EndAttackAnim() {  false; }; */
 
 
 

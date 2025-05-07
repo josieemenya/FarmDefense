@@ -16,7 +16,7 @@ AEnemies::AEnemies()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	PawnSensingComp = CreateDefaultSubobject<UPawnSensingComponent>(TEXT("PawnSensingComponent"));
-	
+	MontagePlay = false; 
 
 }
 
@@ -43,7 +43,7 @@ void AEnemies::BeginPlay()
 void AEnemies::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	--enemy_stats.Health;
+	//--enemy_stats.Health;
 
 }
 
@@ -106,14 +106,6 @@ void AEnemies::PlayMontage()
 		AttackAnimINstance->Montage_Play(AttackMontage);
 }
 
-void AEnemies::EnemyDeath()
-{
-	if (enemy_stats.Health <= 0)
-	{
-		PlayAnimMontage(DeathMontage);
-		MontagePlay = true; 
-	}
-}
 
 //IStatsInterface::Execute_TakeHealth(SensedPawnActor, -(Attack));
 
