@@ -12,7 +12,7 @@
 #include "FarmDefenseCharacter.generated.h"
 
 UENUM(BlueprintType)
-enum class EAxeEquippedState : uint8
+enum class EAxeEquippedState : uint8 // remove maybe, kinda unused
 {
 	AxeEquipped,
 	AxeUnequipped

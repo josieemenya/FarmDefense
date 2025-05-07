@@ -56,40 +56,51 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	bool bIsDamaged;
 
+	// i don't think this is used at all, check and delete later
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float DaytimeManager;
 
+	// same thing for daytime manageer
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	float NightManager;
 
+	// i think i should change to read only
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Default")
 	FPlantInfo PlantInfo;
 
+	//for overlap events
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	class UBoxComponent* BoxOverlap;
 	
+	//for watering functionality, to prevent rapid plant growth
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	int32 howManyTimes;
 
+	// also for gameplay funcitonality and growth functionality
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	TSubclassOf<AActor> AllEnemies;
 
+	// i think... we can remove this
 	UFUNCTION(BlueprintCallable)
 	static FPlantInfo CreateDefaultPlantInfo();
 
+	// i also think we can remove this
 	UFUNCTION(BlueprintPure)
 	static FPlantInfo CreateSpecialPlanInfo(FName PlantName);
 
+	// implemented in BP, if plant has finished growing, sell automatically, desttroy and add max sell price to player
 	UFUNCTION(BlueprintImplementableEvent)
 	void Harvest();
 
-
+	// yet to implement 
 	UFUNCTION(BlueprintCallable)
 	virtual void ChangeInHealth_Implementation(float Change) override;
 
+	// a bit buggy but half does what it's supposed to do-- water plants
 	UFUNCTION(BlueprintCallable)
 	virtual void WaterPlant_Implementation() override;
 
+	// unused-> i think this was made for ui purposes
 	UFUNCTION(BlueprintCallable)
 	void GetDaysLeft_Implementation() override;
 	
@@ -97,27 +108,37 @@ public:
 	
 	public:
 	
+	// there is a difference between max price and sell price, if the plant was damaged, sell prce was supposed to go down by an amount between 3-7.
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float SellPrice;
 
+	// gives max sell price, shop prices were based on 1/4 of the value
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	float MaxSellPrince;
 
+	// sunlight ref.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<ADirectionalLight> SunLightClass;
 
+	// sunlight rec cont.
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	ADirectionalLight* SunLight;
 
+	// character refernce holder value thing
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	AActor* GetCharacter;
 
+	// character class refernce value holder thinf
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<AActor> ActorCharacterClass;
 
+	// self explanatory
 	AActor* OverlappingActor;
 
+	// used so the OnOverlap and EndOverlap code wouldn't be bloated.
 	FORCEINLINE AActor* GetOverlappingActor() const {return  OverlappingActor;}
+
+	// used so the OnOverlap and EndOverlap code wouldn't be bloated.
 	FORCEINLINE void SetOverlappingActor (AActor* v) {OverlappingActor = v;}
 	
 
@@ -125,12 +146,15 @@ public:
 	//UFUNCTION(BlueprintCallable, Category = "FarmDefense")
 	//float GetSellPrince() const { return SellPrice; } // should have many factors for sell price
 
+	// Inherited from Interact Interface Class
 	UFUNCTION(BlueprintCallable)
 	virtual void Action_Implementation() override;
 
+	// Unused, delete later
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	class UUserWidget* PlantActionMenu;
 
+	// the theory was that when actor was clicked you could bring up a plant meanu that showed : water, harvet and otherers
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf<class UUserWidget> PlantActionMenuContext;
 
@@ -156,9 +180,11 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// calculates progress of plant growth and sets mesh accordingly
 	UFUNCTION(BlueprintCallable)
 	void ChangeBody(float Percentage);
 
+	// used in calculation for plant growth
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 DayCounter; 
 

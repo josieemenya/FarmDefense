@@ -20,6 +20,8 @@ APlants::APlants()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	// setting default values
 	PlantInfo = CreateDefaultPlantInfo();
 	PlantInfo.PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
 	RootComponent = PlantInfo.PlantBody;
@@ -36,24 +38,24 @@ APlants::APlants()
 }
 
 
-FPlantInfo APlants::CreateDefaultPlantInfo()
+FPlantInfo APlants::CreateDefaultPlantInfo() // tbh i don't think i actually use this
 {
 	return FPlantInfo();
 }
 
-FPlantInfo APlants::CreateSpecialPlanInfo(FName PlantName)
+FPlantInfo APlants::CreateSpecialPlanInfo(FName PlantName) // uunused
 {
 	return FPlantInfo(PlantName);
 }
 
-void APlants::ChangeInHealth_Implementation(float Change)
+void APlants::ChangeInHealth_Implementation(float Change) // yet ti be used but will be used
 {
 	this->PlantInfo.MaxPlantHealth += Change;
 }
 
 void APlants::GetDaysLeft_Implementation()
 {
-	DaysLeft = (FText::AsNumber(this->PlantInfo.DaysToGrow));
+	DaysLeft = (FText::AsNumber(this->PlantInfo.DaysToGrow)); // unuased
 }
 
 void APlants::WaterPlant_Implementation()
@@ -64,18 +66,21 @@ void APlants::WaterPlant_Implementation()
 
 void APlants::Action_Implementation()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Plant Action Test"));
+
 	if (PlantInfo.hasBeenWatered && howManyTimes == 1 && PlantInfo.DaysToGrow > 0)
 	{
 		if ((GetOverlappingActor() == nullptr))
 		{
 			GetCharacter = UGameplayStatics::GetActorOfClass(GetWorld(), ActorCharacterClass); 
-			SetOverlappingActor(GetCharacter);
+			SetOverlappingActor(GetCharacter); 
 		}// if days to grow == 0 - harvest;
-	} else if (howManyTimes > 1 || howManyTimes == 0)
+	} else if (howManyTimes >= 0)
 	{
 		FString Message = "You have already watered "+ FString(this->GetName());
-		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), Message);
+		GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), Message); // playtest and ad return; if neccessary.
 	} 
+
 	UpdateStamina();
 }
 
@@ -122,9 +127,9 @@ void APlants::BeginPlay()
 	DayCounter = PlantInfo.DaysToGrow;
 	SetActorScale3D(FVector(2, 2, 2));
 	
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 5.f, true);
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle3, this, &APlants::GetDaysLeft_Implementation, 45.f, true);
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &APlants::bIsDaytime, 60.f, true); // checks for daytime, i think we can potentially get rid of this
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle2, this, &APlants::bCanGrow, 5.f, true); // growth functionality
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle3, this, &APlants::GetDaysLeft_Implementation, 45.f, true); // unused
 
 	
 	
@@ -139,12 +144,11 @@ void APlants::BeginPlay()
 
 		if (ADirectionalLight* DirectionalLight = Cast<ADirectionalLight>(*DirectionalLightIter))
 		{
-			GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("Found Sunlight"));
+		// replace with UE_LOG	GEngine->AddOnScreenDebugMessage(1, 10.f, FColor::MakeRandomColor(), TEXT("Found Sunlight"));
 			SunLight = DirectionalLight;
-			//SunLight->SetBrightness(0.08f);
-			//SunLight->SetLightColor(LightColour);
+		
 		} else
-		{
+		{	// replace with ue_log
 			GEngine->AddOnScreenDebugMessage(1, 30.f, FColor::MakeRandomColor(), TEXT("No Sunlight"));
 		}
 	}
@@ -157,7 +161,7 @@ void APlants::BeginPlay()
 void APlants::NotifyActorOnClicked(FKey ButtonPressed)
 {
 	Super::NotifyActorOnClicked(ButtonPressed);
-	GEngine->AddOnScreenDebugMessage(12, 10.f, FColor::MakeRandomColor(), TEXT("I've been clicked"));
+	GEngine->AddOnScreenDebugMessage(12, 10.f, FColor::MakeRandomColor(), TEXT("I've been clicked")); // remove
 }
 
 // Called every frame
@@ -224,8 +228,8 @@ void APlants::bCanGrow()
 			if (EnemyActos.IsEmpty())
 			{
 				--PlantInfo.DaysToGrow;
-				SunLight->SetBrightness(10.f);
-				SunLight->SetLightColor(FColor(1.0, 1.0, 1.0));
+				SunLight->SetBrightness(10.f); //sets it back to day
+				SunLight->SetLightColor(FColor(1.0, 1.0, 1.0)); // white
 				PlantInfo.hasBeenWatered = false;
 				
 				
