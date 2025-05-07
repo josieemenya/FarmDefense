@@ -95,6 +95,7 @@ void AEnemies::AttackPlayer()
 		if (SensedPawnActor->Implements<UStatsInterface>())
 		{
 			UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, 100.f, ObjectTypes, false, IgnoreActors, EDrawDebugTrace::ForDuration, Hit, true, FColor::MakeRandomColor());
+			// DO PLAYER DAMAGE
 		}
 			
 	}
