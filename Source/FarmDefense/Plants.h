@@ -23,29 +23,36 @@ public:
 	// Sets default values for this actor's properties
 	APlants();
 
-	//APlants(const FObjectInitializer& ObjectInitializer, FPlantInfo);
+	// sets cost for watering  plant
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float StaminaCost; 
 	
+	// i don't think i've ever used this delete
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Interact)
 	FText DaysLeft; 
 
+	// i think this was for.. nah, can't think of anything. delete
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsDay;
 
 
+	// implememted in bp because i couldn't hack it in cpp
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateStamina(); 
 
+	// okay i think this runs. okay it's kinda trash. delete
 	UFUNCTION(BlueprintCallable)
 	void bIsDaytime();
 
+	// key function, basically all plant growing functionality is in here
 	UFUNCTION(BlueprintCallable)
 	void bCanGrow();
 
+	// i think this was an experiment. delete soon
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	FColor LightColour;
 
+	// debateable on whether this is useful yet
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "FarmDefense")
 	bool bIsDamaged;
 
@@ -131,10 +138,10 @@ public:
 
 	
 protected:
-
+	UFUNCTION()
 	virtual void OnOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION()
 	virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
-	
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 

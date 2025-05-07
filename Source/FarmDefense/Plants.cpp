@@ -22,10 +22,11 @@ APlants::APlants()
 	PrimaryActorTick.bCanEverTick = true;
 	PlantInfo = CreateDefaultPlantInfo();
 	PlantInfo.PlantBody = CreateDefaultSubobject<UStaticMeshComponent>("PlantBody");
-	PlantInfo.PlantBody->SetupAttachment(GetRootComponent());
+	RootComponent = PlantInfo.PlantBody;
+	//PlantInfo.PlantBody->SetupAttachment(GetRootComponent());
 	OverlappingActor = nullptr;
 	BoxOverlap = CreateDefaultSubobject<UBoxComponent>("BoxOverlap");
-	BoxOverlap->SetupAttachment(RootComponent);
+	BoxOverlap->SetupAttachment(PlantInfo.PlantBody);
 	StaminaCost = -12;
 	howManyTimes = 0;
 	//BoxOverlap->size
