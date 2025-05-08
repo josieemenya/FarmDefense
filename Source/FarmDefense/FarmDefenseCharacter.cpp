@@ -192,7 +192,9 @@ void AFarmDefenseCharacter::DayDrain()
 	}
 	if (PlayerStatsInfo.Health <= 0.0f)
 	{
-		GetCharacterMovement()->DisableMovement(); 
+		
+		GetCharacterMovement()->DisableMovement();
+		UGameplayStatics::SetGamePaused(GetWorld(), true); 
 	}
 }
 
