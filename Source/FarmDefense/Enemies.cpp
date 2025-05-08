@@ -5,6 +5,7 @@
 #include "Animation/AnimMontage.h"
 #include "Animation/AnimInstance.h"
 #include "StatsInterface.h"
+#include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "Perception/PawnSensingComponent.h"
 
@@ -34,9 +35,15 @@ void AEnemies::BeginPlay()
 	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemies::isSensingPawn, 1.f, true);
 	GetWorld()->GetTimerManager().SetTimer(EnemyLifeSupport, this, &AEnemies::EnemyDeath, 1.f, true);
-	
+	Attack = FMath::RandRange(0.01f, 0.5f); 
 	
 
+}
+
+void AEnemies::Destroyed()
+{
+	ACharacter::Destroyed();
+	//stats interface, increment enemy kill
 }
 
 // Called every frame

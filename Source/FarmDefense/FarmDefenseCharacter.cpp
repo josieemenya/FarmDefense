@@ -105,7 +105,6 @@ void AFarmDefenseCharacter::BeginPlay()
 
 	FTimerHandle TimerHandle;
 	FTimerHandle DrainStamina; 
-	//enlarge = false;
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
@@ -180,6 +179,13 @@ void AFarmDefenseCharacter::HitDetect()
 	}
 }
 
+FString AFarmDefenseCharacter::GetDeathText()
+{
+	FString DeathText = "You Lived for " + FString::FromInt(GetTotalDays_Implementation()) + " Days\n" + "You amassed a whole " + FString::SanitizeFloat(GetTotalWealth_Implementation()) + " coins\n" +
+		"You Grew x Crops\n" + "You Killed X Enemies;";
+	return DeathText;
+}
+
 
 void AFarmDefenseCharacter::DayDrain()
 {
@@ -194,7 +200,16 @@ void AFarmDefenseCharacter::DayDrain()
 	{
 		
 		GetCharacterMovement()->DisableMovement();
-		UGameplayStatics::SetGamePaused(GetWorld(), true); 
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+		DeathScreen->Construct();
+		DeathScreen->AddToViewport();
+	}
+	if (GetTotalDays_Implementation() == 5)
+	{
+		GetCharacterMovement()->DisableMovement();
+		UGameplayStatics::SetGamePaused(GetWorld(), true);
+		DemoWinScreen->Construct();
+		DemoWinScreen->AddToViewport();
 	}
 }
 
@@ -417,7 +432,7 @@ void AFarmDefenseCharacter::Trigger(const FInputActionValue& Value)
 
 void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 {
-	GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("we acknowlege you??"));
+	//GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("we acknowlege you??"));
 	
 	bool Pressed = Value.Get<bool>();
 
@@ -427,7 +442,7 @@ void AFarmDefenseCharacter::OpenContextMenu(const FInputActionValue& Value)
 		ContextMenuWidget = CreateWidget<UUserWidget>(GetWorld(), ContextMenuWidgetClass);
 		ContextMenuWidget->Construct();
 		ContextMenuWidget->AddToViewport();
-		GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
+		//GEngine->AddOnScreenDebugMessage(10, 12.f, FColor::MakeRandomColor(), TEXT("MadeContextMenu"));
 		UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(true);
 		
 	} else

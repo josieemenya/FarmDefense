@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "InteractInterface.h"
 #include "StatsInterface.h"
+#include "Internationalization/Text.h"
 #include "Logging/LogMacros.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "SimpleMacros.h"
@@ -239,6 +240,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void HitDetect();
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UUserWidget* DeathScreen;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	UUserWidget* DemoWinScreen;
+
+	UFUNCTION(BlueprintPure)
+	FString GetDeathText();
 
 	UFUNCTION(BlueprintCallable)
 	void EquipAxe();

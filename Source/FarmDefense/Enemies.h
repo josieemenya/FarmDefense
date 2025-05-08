@@ -21,7 +21,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
+	// to increment Player Kill Score
+	virtual void Destroyed() override;
+	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -92,6 +95,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FORCEINLINE void CancelAnim() { MontagePlay = false; }
+
+	
 	
 };
 	
