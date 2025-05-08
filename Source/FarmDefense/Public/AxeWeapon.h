@@ -20,7 +20,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	float BaseZ = 0.f; 
+	//float BaseZ = 0.f; 
 
 public:	
 	// Called every frame
@@ -30,7 +30,10 @@ public:
 	TSubclassOf<class ACharacter> Player;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FWeaponStructure AxeStructure; 
+	FWeaponStructure AxeStructure;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	float AxeDamage;
 	
 	UFUNCTION(BlueprintPure)
 	float GetWeaponDamage_Implementation() override;

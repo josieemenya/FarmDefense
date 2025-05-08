@@ -11,6 +11,7 @@
 #include "SimpleMacros.h"
 #include "FarmDefenseCharacter.generated.h"
 
+class ADirectionalLight;
 UENUM(BlueprintType)
 enum class EAxeEquippedState : uint8 // remove maybe, kinda unused
 {
@@ -124,6 +125,7 @@ protected:
 	UFUNCTION()
 	virtual void EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComponent, int32 OtherBodyIndex);
 
+	
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -137,6 +139,10 @@ protected:
 	virtual void UnPossessed() override;
 
 	TWeakObjectPtr<AActor> OverlappingActor {nullptr};
+
+	ADirectionalLight* IfDaytime; // checking if is day then drain stamina;
+
+	void DayDrain(); 
 
 	
 public:
@@ -228,11 +234,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "FarmDefense")
 	AActor* AxeTarget;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "FarmDefense")
+	bool bIsDead; 
+
 	UFUNCTION(BlueprintCallable)
 	void HitDetect();
 
 	UFUNCTION(BlueprintCallable)
-	void EquipAxe(); 
+	void EquipAxe();
+
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void UpdateDeathAnimation() { (bIsDead)? bIsDead = false : bIsDead = true; } ;
 
 	/*UFUNCTION(BlueprintPure)
 	FORCEINLINE void StartAttackAnim() {  true; };

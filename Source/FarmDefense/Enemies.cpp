@@ -71,7 +71,7 @@ void AEnemies::isSensingPawn()
 	if (SensedPawnActor)
 	{
 		Distance = FVector::Dist(GetActorLocation(), SensedPawnActor->GetActorLocation());
-		if (Distance >= 500)
+		if (Distance >= 800)
 		{
 			SensedPawnActor = nullptr;
 		}
@@ -96,6 +96,7 @@ void AEnemies::AttackPlayer()
 		{
 			UKismetSystemLibrary::SphereTraceSingleForObjects(GetWorld(), Start, End, 100.f, ObjectTypes, false, IgnoreActors, EDrawDebugTrace::None, Hit, true, FColor::MakeRandomColor());
 			// DO PLAYER DAMAGE
+			IStatsInterface::Execute_TakeHealth(SensedPawnActor, Attack);
 		}
 			
 	}

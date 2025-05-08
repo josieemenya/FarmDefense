@@ -24,8 +24,7 @@ AAxeWeapon::AAxeWeapon()
 void AAxeWeapon::BeginPlay()
 {
 	Super::BeginPlay();
-	BaseZ = GetActorLocation().Z;
-	AxeStructure = FWeaponStructure(10.f); 
+	AxeStructure = FWeaponStructure(AxeDamage); 
 	
 }
 

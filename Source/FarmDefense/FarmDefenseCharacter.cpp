@@ -25,6 +25,7 @@
 #include "Components/SphereComponent.h"
 #include "Blueprint/UserWidget.h"
 #include "Kismet/GameplayStatics.h"
+#include "Engine/DirectionalLight.h"
 #include "UObject/WeakObjectPtr.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -80,6 +81,7 @@ AFarmDefenseCharacter::AFarmDefenseCharacter()
 	PlayerStatsInfo.Stamina = GetMaxStamina_Implementation();
 
 	bAttacking = false;
+	bIsDead = false;
 
 	
 
@@ -102,6 +104,7 @@ void AFarmDefenseCharacter::BeginPlay()
 	//ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
 
 	FTimerHandle TimerHandle;
+	FTimerHandle DrainStamina; 
 	//enlarge = false;
 	UGameplayStatics::GetPlayerController(GetWorld(), 0)->SetShowMouseCursor(false);
 	FActorSpawnParameters SpawnParams;
@@ -109,7 +112,9 @@ void AFarmDefenseCharacter::BeginPlay()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	AxeTarget = GetWorld()->SpawnActor<AActor>(Axe, this->GetActorLocation(), this->GetActorRotation(), SpawnParams);
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AFarmDefenseCharacter::EquipAxe, 2.0f, true);
-	
+	IfDaytime = Cast<ADirectionalLight>(UGameplayStatics::GetActorOfClass(GetWorld(), ADirectionalLight::StaticClass()));
+	GetWorld()->GetTimerManager().SetTimer(DrainStamina, this, &AFarmDefenseCharacter::DayDrain, 2.0f, true);
+
 
 
 }
@@ -175,6 +180,21 @@ void AFarmDefenseCharacter::HitDetect()
 	}
 }
 
+
+void AFarmDefenseCharacter::DayDrain()
+{
+	if (IfDaytime->GetBrightness() >= 10.f && GetVelocity().Length() > 0.f)
+		PlayerStatsInfo.Stamina -= 1.0f;
+	if (PlayerStatsInfo.Stamina <= 0.0f)
+	{
+		IfDaytime->SetBrightness(0.0f);
+		IfDaytime->SetLightColor(FLinearColor(25, 25, 112));
+	}
+	if (PlayerStatsInfo.Health <= 0.0f)
+	{
+		GetCharacterMovement()->DisableMovement(); 
+	}
+}
 
 float AFarmDefenseCharacter::GetTotalWealth_Implementation()
 {
@@ -262,7 +282,7 @@ void AFarmDefenseCharacter::HealHealth_Implementation(float HealPoint)
 
 void AFarmDefenseCharacter::TakeHealth_Implementation(float DamagePoint)
 {
-	this->PlayerStatsInfo.Health += DamagePoint;
+	this->PlayerStatsInfo.Health -= DamagePoint;
 }
 
 void AFarmDefenseCharacter::Attack(const FInputActionValue& Value)
