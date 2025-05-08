@@ -516,18 +516,3 @@ void AFarmDefenseCharacter::Tick(float DeltaTime)
 	//DrawDebugSphere(GetWorld(), GetMesh()->GetSocketLocation("hand_lSocket"), 10.f, 12, FColor::Red, false, 2.f);
 }
 
-void AFarmDefenseCharacter::PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent)
-{
-    Super::PostEditChangeProperty(PropertyChangedEvent);
-
-    if (PropertyChangedEvent.Property != nullptr)
-    {
-
-        FName PropertyName = PropertyChangedEvent.Property->GetFName();
-
-        if (PropertyName == GET_MEMBER_NAME_CHECKED(AFarmDefenseCharacter, PlayerStatsInfo))
-        {
-           SetPlayerStatsInfo(PlayerStatsInfo);
-        }
-    }
-}

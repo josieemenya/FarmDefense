@@ -134,7 +134,6 @@ protected:
 	// To add mapping context
 	virtual void BeginPlay();
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
-	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void UnPossessed() override;

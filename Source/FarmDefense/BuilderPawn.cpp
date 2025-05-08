@@ -12,7 +12,6 @@
 #include "FarmDefenseCharacter.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "InputActionValue.h"
-#include "K2Node_SpawnActorFromClass.h"
 #include "Animation/AnimSequence.h"
 
 #include "Components/SkeletalMeshComponent.h"
