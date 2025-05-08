@@ -35,10 +35,20 @@ void AEnemies::BeginPlay()
 	
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, this, &AEnemies::isSensingPawn, 1.f, true);
 	GetWorld()->GetTimerManager().SetTimer(EnemyLifeSupport, this, &AEnemies::EnemyDeath, 1.f, true);
+	GetWorld()->GetTimerManager().SetTimer(Check, this, &AEnemies::PickNewTarget, 30.f, true);
 	Attack = FMath::RandRange(0.01f, 0.5f); 
 	
 
 }
+
+void AEnemies::PickNewTarget()
+{
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), PlantClass, Plants);
+	int32 x = FMath::RandRange(0, Plants.Num() - 1);
+	if (Plants.IsValidIndex(x))
+		PlantsTarget = Plants[x];
+}	 
+
 
 void AEnemies::Destroyed()
 {

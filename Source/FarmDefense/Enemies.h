@@ -9,6 +9,7 @@
 #include "Enemies.generated.h"
 
 UCLASS()
+
 class FARMDEFENSE_API AEnemies : public ACharacter, public  IEnemyInterface
 {
 	GENERATED_BODY()
@@ -39,6 +40,9 @@ public:
 	
 	UPROPERTY(EditAnywhere)
 	FEnemyStats enemy_stats;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> PlantClass; 
 
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> Plants;
@@ -82,8 +86,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayMontage();
 
-	 
-
+	UFUNCTION(BlueprintCallable)
+	FORCEINLINE void PickNewTarget();
+	
 	UFUNCTION(BlueprintImplementableEvent)
 	void EnemyDeath();
 

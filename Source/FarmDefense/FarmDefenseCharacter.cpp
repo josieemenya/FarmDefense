@@ -189,27 +189,30 @@ FString AFarmDefenseCharacter::GetDeathText()
 
 void AFarmDefenseCharacter::DayDrain()
 {
-	if (IfDaytime->GetBrightness() >= 10.f && GetVelocity().Length() > 0.f)
-		PlayerStatsInfo.Stamina -= 1.0f;
-	if (PlayerStatsInfo.Stamina <= 0.0f)
+	if (this)
 	{
-		IfDaytime->SetBrightness(0.0f);
-		IfDaytime->SetLightColor(FLinearColor(25, 25, 112));
-	}
-	if (PlayerStatsInfo.Health <= 0.0f)
-	{
+		if (IfDaytime && IfDaytime->GetBrightness() >= 10.f && GetVelocity().Length() > 0.f)
+			PlayerStatsInfo.Stamina -= 1.0f;
+		if (PlayerStatsInfo.Stamina <= 0.0f)
+		{
+			IfDaytime->SetBrightness(0.0f);
+			IfDaytime->SetLightColor(FLinearColor(25, 25, 112));
+		}
+		if (PlayerStatsInfo.Health <= 0.0f)
+		{
 		
-		GetCharacterMovement()->DisableMovement();
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-		DeathScreen->Construct();
-		DeathScreen->AddToViewport();
-	}
-	if (GetTotalDays_Implementation() == 5)
-	{
-		GetCharacterMovement()->DisableMovement();
-		UGameplayStatics::SetGamePaused(GetWorld(), true);
-		DemoWinScreen->Construct();
-		DemoWinScreen->AddToViewport();
+			GetCharacterMovement()->DisableMovement();
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
+			DeathScreen->Construct();
+			DeathScreen->AddToViewport();
+		}
+		if (GetTotalDays_Implementation() == 5)
+		{
+			GetCharacterMovement()->DisableMovement();
+			UGameplayStatics::SetGamePaused(GetWorld(), true);
+			DemoWinScreen->Construct();
+			DemoWinScreen->AddToViewport();
+		}
 	}
 }
 
