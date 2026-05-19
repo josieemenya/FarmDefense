@@ -1,6 +1,5 @@
-# newFinalProject
- this WILL be a tower defense farming sim, if i stray I FAIL
-
+# Green Gables
+Tower Defense + Farming Cozy Game hybrid Simulator I made for my final project in university/
 
 
  ![using lambdas](otherstuff/lambda.png)
