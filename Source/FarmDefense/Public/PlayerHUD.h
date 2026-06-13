@@ -10,6 +10,7 @@
  * 
  */
 
+class AFarmDefenseCharacter;
 class UScaleBox;
 class UBorder;
 class UEditableTextBox;
@@ -33,13 +34,6 @@ protected:
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
 	TObjectPtr<UCanvasPanel> CanvasPanel;
-	
-	// switch night UI
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UButton> SwitchToNightButton;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
-	TObjectPtr<UImage> SwitchNightImage;
 	
 	// Currency / Gold UI
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (BindWidget))
@@ -87,4 +81,27 @@ public:
 	// non UI, non Binding variables
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UFont> TextFont; 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<AFarmDefenseCharacter> FarmDefenseCharacter; 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<UTexture2D> EquipAxeIcon; 
+	
+	// functions
+	
+	UFUNCTION(BlueprintPure)
+	float GetHealthBar() const; 
+	
+	UFUNCTION(BlueprintPure)
+	float GetStaminaBar() const;
+	
+	UFUNCTION(BlueprintPure)
+	FText GetDaysSpentTextNumber() const;
+	
+	UFUNCTION(BlueprintPure)
+	FText WealthText() const; 
+	
+	UFUNCTION()
+	void EquipAxeAction(); 
 };
